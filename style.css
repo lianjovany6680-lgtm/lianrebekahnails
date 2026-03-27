@@ -512,7 +512,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: url('Pictures/lian_rebekahnails/lian_rebekahnails_1768844199_3813664012110722781_63509868957.jpg') center/cover;
+  background: url('lian_rebekahnails_1768844199_3813664012110722781_63509868957.jpg') center/cover;
   opacity: 0.12;
 }
 .cta .container { position: relative; z-index: 1; }
