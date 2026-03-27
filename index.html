@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lian Rebekah Nails | לק ג'ל מקצועי</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Heebo:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- CUSTOM CURSOR -->
+  <div class="cursor"></div>
+  <div class="cursor-follower"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <img src="Screenshot 2026-03-27 122808.png" alt="Lian Rebekah Nails" class="logo"/>
+    <ul>
+      <li><a href="#about">אודות</a></li>
+      <li><a href="#services">שירותים</a></li>
+      <li><a href="#gallery">גלריה</a></li>
+      <li><a href="#reviews">ביקורות</a></li>
+      <li><a href="#contact" class="nav-cta">קביעת תור</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger">&#9776;</button>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="close-menu" id="closeMenu">✕</button>
+    <ul>
+      <li><a href="#about" class="mob-link">אודות</a></li>
+      <li><a href="#services" class="mob-link">שירותים</a></li>
+      <li><a href="#gallery" class="mob-link">גלריה</a></li>
+      <li><a href="#reviews" class="mob-link">ביקורות</a></li>
+      <li><a href="#contact" class="mob-link">קביעת תור</a></li>
+    </ul>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <canvas id="particles"></canvas>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-tag">✦ ברוכות הבאות ✦</p>
+      <h1 class="hero-title">Lian Rebekah<br/><em>Nails</em></h1>
+      <p class="hero-desc">חווית לק ג'ל מקצועית, אלגנטית ומותאמת אישית</p>
+      <div class="hero-btns">
+        <a href="https://wa.me/972523937950?text=%D7%94%D7%99%D7%99%20%D7%9C%D7%99%D7%90%D7%9F!%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A7%D7%91%D7%95%D7%A2%20%D7%AA%D7%95%D7%A8%20%F0%9F%92%85" target="_blank" class="btn-wa">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.855L0 24l6.335-1.508A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.371l-.36-.214-3.727.977.994-3.634-.235-.374A9.818 9.818 0 1112 21.818z"/></svg>
+          קביעת תור עכשיו
+        </a>
+        <a href="#gallery" class="btn-outline">צפי בעבודות</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <span></span>
+    </div>
+    <!-- Hero image slideshow -->
+    <div class="hero-slides">
+      <div class="hero-slide active" style="background-image:url('Pictures/lian_rebekahnails/lian_rebekahnails_1770156111_3824668762218231546_63509868957.jpg')"></div>
+      <div class="hero-slide" style="background-image:url('Pictures/lian_rebekahnails/lian_rebekahnails_1769153861_3816261650098218404_63509868957.jpg')"></div>
+      <div class="hero-slide" style="background-image:url('Pictures/lian_rebekahnails/lian_rebekahnails_1768157840_3807906414572865194_63509868957.jpg')"></div>
+      <div class="hero-slide" style="background-image:url('Pictures/lian_rebekahnails/liangiovanni__1771098347_3832573181902758155_43949141773.jpg')"></div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span>לק ג'ל קלאסי</span><span>✦</span>
+      <span>נייל ארט</span><span>✦</span>
+      <span>עיצובים מיוחדים</span><span>✦</span>
+      <span>תוספות ואבנים</span><span>✦</span>
+      <span>טיפול ידיים</span><span>✦</span>
+      <span>גלימר</span><span>✦</span>
+      <span>פרנץ' מודרני</span><span>✦</span>
+      <span>כרום ומראה</span><span>✦</span>
+      <span>לק ג'ל קלאסי</span><span>✦</span>
+      <span>נייל ארט</span><span>✦</span>
+      <span>עיצובים מיוחדים</span><span>✦</span>
+      <span>תוספות ואבנים</span><span>✦</span>
+      <span>טיפול ידיים</span><span>✦</span>
+      <span>גלימר</span><span>✦</span>
+      <span>פרנץ' מודרני</span><span>✦</span>
+      <span>כרום ומראה</span><span>✦</span>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="container about-grid">
+      <div class="about-img-wrap fade-in">
+        <img src="Pictures/lian_rebekahnails/lian_rebekahnails_1769023273_3815166199051593265_63509868957.jpg" alt="Lian Rebekah"/>
+        <div class="about-badge">✦ מוסמכת ומקצועית</div>
+      </div>
+      <div class="about-text fade-in">
+        <span class="section-tag">אודות</span>
+        <h2>אמנות על<br/>קצות האצבעות</h2>
+        <p>אני ליאן, טכנאית ציפורניים מוסמכת עם ניסיון עשיר בלק ג'ל, עיצובים מיוחדים ותוספות. כל לקוחה מקבלת יחס אישי, חומרים איכותיים ותוצאה שתגרום לך להרגיש מלכה.</p>
+        <p>אני משתמשת אך ורק בחומרים מהמותגים המובילים בעולם, ומתעדכנת בכל הטרנדים החמים ביותר.</p>
+        <div class="stats">
+          <div class="stat fade-in"><span class="counter" data-target="500">0</span><span>+</span><p>לקוחות מרוצות</p></div>
+          <div class="stat fade-in"><span class="counter" data-target="3">0</span><span>+</span><p>שנות ניסיון</p></div>
+          <div class="stat fade-in"><span class="counter" data-target="100">0</span><span>%</span><p>חומרים איכותיים</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="container">
+      <span class="section-tag">שירותים</span>
+      <h2>מה אני מציעה</h2>
+      <div class="services-grid">
+        <div class="service-card fade-in">
+          <div class="service-img"><img src="Pictures/lian_rebekahnails/lian_rebekahnails_1762260619_3758436939784274596_63509868957.jpg" alt="לק ג'ל קלאסי"/></div>
+          <div class="service-body">
+            <div class="service-icon">💅</div>
+            <h3>לק ג'ל קלאסי</h3>
+            <p>ציפוי לק ג'ל עמיד ומבריק שמחזיק עד 3 שבועות ללא פגמים</p>
+          </div>
+        </div>
+        <div class="service-card fade-in">
+          <div class="service-img"><img src="Pictures/lian_rebekahnails/lian_rebekahnails_1767033553_3798475214821030980_63509868957.jpg" alt="נייל ארט"/></div>
+          <div class="service-body">
+            <div class="service-icon">✨</div>
+            <h3>נייל ארט ועיצובים</h3>
+            <p>גלימר, פרחים, גיאומטרי, כרום ועיצובים מיוחדים לכל אירוע</p>
+          </div>
+        </div>
+        <div class="service-card fade-in">
+          <div class="service-img"><img src="Pictures/lian_rebekahnails/lian_rebekahnails_1768844199_3813664011901003386_63509868957.jpg" alt="תוספות"/></div>
+          <div class="service-body">
+            <div class="service-icon">💎</div>
+            <h3>תוספות ואבנים</h3>
+            <p>קריסטלים, פנינים ועיטורים יוקרתיים לכל אירוע מיוחד</p>
+          </div>
+        </div>
+        <div class="service-card fade-in">
+          <div class="service-img"><img src="Pictures/lian_rebekahnails/lian_rebekahnails_1765104720_3782294990098324166_63509868957.jpg" alt="טיפול ידיים"/></div>
+          <div class="service-body">
+            <div class="service-icon">🌸</div>
+            <h3>טיפול ידיים</h3>
+            <p>עיצוב, פילינג ולחות לידיים רכות, מטופחות ויפות</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery" id="gallery">
+    <div class="container">
+      <span class="section-tag">גלריה</span>
+      <h2>עבודות אחרונות</h2>
+      <div class="gallery-grid">
+        <div class="gallery-item fade-in" onclick="openLightbox(0)"><img src="Pictures/lian_rebekahnails/lian_rebekahnails_1756675467_3711585291971640545_63509868957.jpg" alt="nail art"/><div class="gallery-overlay"><span>צפי</span></div></div>
+        <div class="gallery-item fade-in" onclick="openLightbox(1)"><img src="Pictures/lian_rebekahnails/lian_rebekahnails_1761249982_3749959106288190159_63509868957.jpg" alt="nail art"/><div class="gallery-overlay"><span>צפי</span></div></div>
+        <div class="gallery-item fade-in" onclick="openLightbox(2)"><img src="Pictures/lian_rebekahnails/lian_rebekahnails_1761852504_3755013426746495935_63509868957.jpg" alt="nail art"/><div class="gallery-overlay"><span>צפי</span></div></div>
+        <div class="gallery-item fade-in" onclick="openLightbox(3)"><img src="Pictures/lian_rebekahnails/lian_rebekahnails_1762260619_3758436939784274596_63509868957.jpg" alt="nail art"/><div class="gallery-overlay"><span>צפי</span></div></div>
+        <div class="gallery-item fade-in" onclick="openLightbox(4)"><img src="Pictures/lian_rebekahnails/lian_rebekahnails_1762710562_3762211337473380088_63509868957.jpg" alt="nail art"/><div class="gallery-overlay"><span>צפי</span></div></div>
+        <div class="gallery-item fade-in" onclick="openLightbox(5)"><img src="Pictures/lian_rebekahnails/lian_rebekahnails_1765104720_3782294990098324166_63509868957.jpg" alt="nail art"/><div class="gallery-overlay"><span>צפי</span></div></div>
+        <div class="gallery-item fade-in" onclick="openLightbox(6)"><img src="Pictures/lian_rebekahnails/lian_rebekahnails_1766259286_3791980189065181661_63509868957.jpg" alt="nail art"/><div class="gallery-overlay"><span>צפי</span></div></div>
+        <div class="gallery-item fade-in" onclick="openLightbox(7)"><img src="Pictures/lian_rebekahnails/lian_rebekahnails_1767033553_3798475214821030980_63509868957.jpg" alt="nail art"/><div class="gallery-overlay"><span>צפי</span></div></div>
+        <div class="gallery-item fade-in" onclick="openLightbox(8)"><img src="Pictures/lian_rebekahnails/lian_rebekahnails_1767559165_3802884371632643582_63509868957.jpg" alt="nail art"/><div class="gallery-overlay"><span>צפי</span></div></div>
+        <div class="gallery-item fade-in" onclick="openLightbox(9)"><img src="Pictures/lian_rebekahnails/lian_rebekahnails_1767902769_3805766730753250624_63509868957.jpg" alt="nail art"/><div class="gallery-overlay"><span>צפי</span></div></div>
+        <div class="gallery-item fade-in" onclick="openLightbox(10)"><img src="Pictures/lian_rebekahnails/lian_rebekahnails_1768157840_3807906414572865194_63509868957.jpg" alt="nail art"/><div class="gallery-overlay"><span>צפי</span></div></div>
+        <div class="gallery-item fade-in" onclick="openLightbox(11)"><img src="Pictures/lian_rebekahnails/lian_rebekahnails_1768844199_3813664011901003386_63509868957.jpg" alt="nail art"/><div class="gallery-overlay"><span>צפי</span></div></div>
+        <div class="gallery-item fade-in" onclick="openLightbox(12)"><img src="Pictures/lian_rebekahnails/lian_rebekahnails_1768844199_3813664011959720730_63509868957.jpg" alt="nail art"/><div class="gallery-overlay"><span>צפי</span></div></div>
+        <div class="gallery-item fade-in" onclick="openLightbox(13)"><img src="Pictures/lian_rebekahnails/lian_rebekahnails_1768844199_3813664012110722781_63509868957.jpg" alt="nail art"/><div class="gallery-overlay"><span>צפי</span></div></div>
+        <div class="gallery-item fade-in" onclick="openLightbox(14)"><img src="Pictures/lian_rebekahnails/lian_rebekahnails_1769023273_3815166199051593265_63509868957.jpg" alt="nail art"/><div class="gallery-overlay"><span>צפי</span></div></div>
+        <div class="gallery-item fade-in" onclick="openLightbox(15)"><img src="Pictures/lian_rebekahnails/lian_rebekahnails_1769153861_3816261650098218404_63509868957.jpg" alt="nail art"/><div class="gallery-overlay"><span>צפי</span></div></div>
+        <div class="gallery-item fade-in" onclick="openLightbox(16)"><img src="Pictures/lian_rebekahnails/lian_rebekahnails_1770156111_3824668762218231546_63509868957.jpg" alt="nail art"/><div class="gallery-overlay"><span>צפי</span></div></div>
+        <div class="gallery-item fade-in" onclick="openLightbox(17)"><img src="Pictures/lian_rebekahnails/liangiovanni__1771098347_3832573181902758155_43949141773.jpg" alt="nail art"/><div class="gallery-overlay"><span>צפי</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lb-close" onclick="closeLightbox()">✕</button>
+    <button class="lb-prev" onclick="event.stopPropagation();changeSlide(-1)">&#8249;</button>
+    <button class="lb-next" onclick="event.stopPropagation();changeSlide(1)">&#8250;</button>
+    <img id="lb-img" src="" alt=""/>
+  </div>
+
+  <!-- REVIEWS -->
+  <section class="reviews" id="reviews">
+    <div class="container">
+      <span class="section-tag">ביקורות</span>
+      <h2>מה אומרות הלקוחות</h2>
+      <div class="reviews-grid">
+        <div class="review-card fade-in">
+          <div class="stars">★★★★★</div>
+          <p>"ליאן פשוט קסומה! הציפורניים יצאו מושלמות, מחזיקות שבועות ולא מתקלפות. ממליצה בחום לכולן!"</p>
+          <div class="reviewer">
+            <div class="reviewer-avatar">מ</div>
+            <div><strong>מיכל כ.</strong><span>לקוחה קבועה</span></div>
+          </div>
+        </div>
+        <div class="review-card fade-in">
+          <div class="stars">★★★★★</div>
+          <p>"השירות הכי מקצועי שהיה לי. ליאן מקשיבה למה שאת רוצה ומביאה תוצאות מדהימות. אני לא הולכת לשום מקום אחר!"</p>
+          <div class="reviewer">
+            <div class="reviewer-avatar">ש</div>
+            <div><strong>שירה ל.</strong><span>לקוחה קבועה</span></div>
+          </div>
+        </div>
+        <div class="review-card fade-in">
+          <div class="stars">★★★★★</div>
+          <p>"עשיתי ציפורניים לחתונה שלי אצל ליאן ויצא פשוט חלומי! כולן שאלו אותי איפה עשיתי. תודה ליאן!"</p>
+          <div class="reviewer">
+            <div class="reviewer-avatar">נ</div>
+            <div><strong>נועה ר.</strong><span>לקוחה מרוצה</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta" id="contact">
+    <div class="cta-bg"></div>
+    <div class="container">
+      <span class="section-tag light">קביעת תור</span>
+      <h2>מוכנה לציפורניים<br/>של מלכה? 👑</h2>
+      <p>שלחי הודעה עכשיו ונקבע תור שיתאים לך</p>
+      <a href="https://wa.me/972523937950?text=%D7%94%D7%99%D7%99%20%D7%9C%D7%99%D7%90%D7%9F!%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A7%D7%91%D7%95%D7%A2%20%D7%AA%D7%95%D7%A8%20%F0%9F%92%85" target="_blank" class="btn-wa large">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.855L0 24l6.335-1.508A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.371l-.36-.214-3.727.977.994-3.634-.235-.374A9.818 9.818 0 1112 21.818z"/></svg>
+        שלחי הודעה בוואטסאפ
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <img src="Screenshot 2026-03-27 122808.png" alt="logo" class="footer-logo"/>
+    <p>© 2025 Lian Rebekah Nails · כל הזכויות שמורות</p>
+    <p class="footer-sub">עיצוב ציפורניים מקצועי · לק ג'ל · נייל ארט</p>
+  </footer>
+
+  <!-- WHATSAPP FLOAT -->
+  <a href="https://wa.me/972523937950?text=%D7%94%D7%99%D7%99%20%D7%9C%D7%99%D7%90%D7%9F!%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A7%D7%91%D7%95%D7%A2%20%D7%AA%D7%95%D7%A8%20%F0%9F%92%85" target="_blank" class="wa-float">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.855L0 24l6.335-1.508A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.371l-.36-.214-3.727.977.994-3.634-.235-.374A9.818 9.818 0 1112 21.818z"/></svg>
+    <span class="wa-pulse"></span>
+  </a>
+
+  <script src="script.js"></script>
+</body>
+</html>
