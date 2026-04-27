@@ -7,12 +7,30 @@ function saveToSheets(appt) {
     date: appt.date, time: appt.time, clientName: appt.clientName,
     clientPhone: appt.clientPhone, notes: appt.notes || '', status: appt.status,
   };
-  // no-cors - לא נקבל תשובה אבל הבקשה עוברת
-  fetch(WEBAPP_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    body: JSON.stringify(slim),
-  }).catch(e => console.warn('Sheets sync failed:', e));
+  // שולחים דרך form בתוך iframe נסתר - עובד עם CORS
+  const iframe = document.createElement('iframe');
+  iframe.name = 'sheetsFrame';
+  iframe.style.display = 'none';
+  document.body.appendChild(iframe);
+
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = WEBAPP_URL;
+  form.target = 'sheetsFrame';
+  form.style.display = 'none';
+
+  const input = document.createElement('input');
+  input.type = 'hidden';
+  input.name = 'payload';
+  input.value = JSON.stringify(slim);
+  form.appendChild(input);
+  document.body.appendChild(form);
+  form.submit();
+
+  setTimeout(() => {
+    form.remove();
+    iframe.remove();
+  }, 5000);
 }
 
 async function loadFromSheets() {
