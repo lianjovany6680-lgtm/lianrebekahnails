@@ -3,23 +3,19 @@ const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxAAZ1qzvkid1XkZJBH2
 
 async function saveToSheets(appt) {
   try {
-    await fetch(WEBAPP_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(appt),
-    });
+    const url = WEBAPP_URL + '?action=save&data=' + encodeURIComponent(JSON.stringify(appt));
+    await fetch(url, { mode: 'no-cors' });
   } catch(e) { console.warn('Sheets sync failed:', e); }
 }
 
 async function loadFromSheets() {
   try {
-    const res = await fetch(WEBAPP_URL);
+    const url = WEBAPP_URL + '?action=load';
+    const res = await fetch(url);
     const rows = await res.json();
-    if (!Array.isArray(rows) || rows.length === 0) return;
-    // המר שורות לפורמט של האתר
+    if (!Array.isArray(rows) || rows.length === 0) return null;
     const appts = rows.map(r => ({
-      id:          String(r['ID'] || r['id'] || ''),
+      id:          String(r['דיID'] || r['ID'] || r['id'] || ''),
       serviceName: String(r['שירות'] || ''),
       serviceIcon: '💅',
       date:        String(r['תאריך'] || ''),
