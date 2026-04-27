@@ -22,8 +22,15 @@ function tryLogin() {
   console.log('correctPass:', correctPass);
   console.log('settings:', JSON.stringify(settings));
   if (pass === correctPass) {
-    document.getElementById('loginOverlay').classList.add('hidden');
-    document.getElementById('adminWrap').classList.remove('hidden');
+    console.log('login success - hiding overlay');
+    const overlay = document.getElementById('loginOverlay');
+    const wrap = document.getElementById('adminWrap');
+    console.log('overlay classes before:', overlay.className);
+    console.log('wrap classes before:', wrap.className);
+    overlay.classList.add('hidden');
+    wrap.classList.remove('hidden');
+    console.log('overlay classes after:', overlay.className);
+    console.log('wrap classes after:', wrap.className);
     initAdmin();
   } else {
     document.getElementById('loginErr').classList.remove('hidden');
