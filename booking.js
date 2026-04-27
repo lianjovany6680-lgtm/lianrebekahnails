@@ -2,32 +2,17 @@
 const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxAAZ1qzvkid1XkZJBH2dbIPUcJB5kraQZ1-UrgBoO48CHNEwN6thQAsrjNXa9g4Y1u1A/exec';
 
 function saveToSheets(appt) {
-  try {
-    // שולחים רק את השדות הנחוצים כדי לקצר את ה-URL
-    const slim = {
-      id:          appt.id,
-      serviceName: appt.serviceName,
-      duration:    appt.duration,
-      date:        appt.date,
-      time:        appt.time,
-      clientName:  appt.clientName,
-      clientPhone: appt.clientPhone,
-      notes:       appt.notes || '',
-      status:      appt.status,
-    };
-    const callbackName = 'saveCb_' + Date.now();
-    const url = WEBAPP_URL + '?action=save&callback=' + callbackName + '&data=' + encodeURIComponent(JSON.stringify(slim));
-    window[callbackName] = (res) => {
-      delete window[callbackName];
-      document.getElementById('saveScript')?.remove();
-      console.log('Sheets save:', res);
-    };
-    const s = document.createElement('script');
-    s.id = 'saveScript';
-    s.src = url;
-    s.onerror = () => console.warn('Save script error');
-    document.body.appendChild(s);
-  } catch(e) { console.warn('Sheets sync failed:', e); }
+  const slim = {
+    id: appt.id, serviceName: appt.serviceName, duration: appt.duration,
+    date: appt.date, time: appt.time, clientName: appt.clientName,
+    clientPhone: appt.clientPhone, notes: appt.notes || '', status: appt.status,
+  };
+  // no-cors - לא נקבל תשובה אבל הבקשה עוברת
+  fetch(WEBAPP_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: JSON.stringify(slim),
+  }).catch(e => console.warn('Sheets sync failed:', e));
 }
 
 async function loadFromSheets() {
