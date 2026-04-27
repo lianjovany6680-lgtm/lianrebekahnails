@@ -1,4 +1,4 @@
-const CACHE = 'lr-nails-v1';
+const CACHE = 'lr-nails-v4';
 const ASSETS = ['/', '/booking.html', '/admin.html', '/booking.js', '/booking-ui.js', '/admin-ui.js', '/booking.css', '/style.css'];
 
 self.addEventListener('install', e => {
