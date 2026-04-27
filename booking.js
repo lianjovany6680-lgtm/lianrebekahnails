@@ -39,9 +39,14 @@ const DEFAULT_SETTINGS = {
 function getServices() { return DB.get('services', DEFAULT_SERVICES); }
 function getSettings() {
   const saved = DB.get('settings', null);
-  if (!saved) return DEFAULT_SETTINGS;
-  // merge workDays in case keys missing
-  return { ...DEFAULT_SETTINGS, ...saved, workDays: { ...DEFAULT_SETTINGS.workDays, ...saved.workDays } };
+  if (!saved) return { ...DEFAULT_SETTINGS };
+  return {
+    ...DEFAULT_SETTINGS,
+    ...saved,
+    adminPass: saved.adminPass || DEFAULT_SETTINGS.adminPass,
+    workDays: { ...DEFAULT_SETTINGS.workDays, ...saved.workDays },
+    blockedDates: saved.blockedDates || [],
+  };
 }
 function getAppointments() { return DB.get('appointments', []); }
 function saveAppointments(arr) { DB.set('appointments', arr); }
