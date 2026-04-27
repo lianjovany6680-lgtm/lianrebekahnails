@@ -1,4 +1,75 @@
-// ── CUSTOM CONFIRM DIALOG ──
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('loginBtn').addEventListener('click', tryLogin);
+  document.getElementById('passInput').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+  document.getElementById('logoutBtn').addEventListener('click', doLogout);
+  document.querySelectorAll('.admin-nav-btn').forEach(btn => btn.addEventListener('click', () => switchPanel(btn.dataset.panel)));
+  document.getElementById('filterStatus').addEventListener('change', renderAllAppointments);
+  document.getElementById('filterDate').addEventListener('change', renderAllAppointments);
+  document.getElementById('clearFilter').addEventListener('click', clearFilters);
+  document.getElementById('saveSettings').addEventListener('click', saveSettingsHandler);
+  document.getElementById('addServiceBtn').addEventListener('click', addService);
+  document.getElementById('saveServices').addEventListener('click', saveServicesHandler);
+});
+
+// ── LOGIN ──
+function tryLogin() {
+  const pass = document.getElementById('passInput').value;
+  const settings = getSettings();
+  if (pass === settings.adminPass) {
+    document.getElementById('loginOverlay').classList.add('hidden');
+    document.getElementById('adminWrap').classList.remove('hidden');
+    initAdmin();
+  } else {
+    document.getElementById('loginErr').classList.remove('hidden');
+    document.getElementById('passInput').value = '';
+  }
+}
+
+function doLogout() {
+  document.getElementById('adminWrap').classList.add('hidden');
+  document.getElementById('loginOverlay').classList.remove('hidden');
+  document.getElementById('passInput').value = '';
+  document.getElementById('loginErr').classList.add('hidden');
+}
+
+function initAdmin() {
+  requestNotificationPermission();
+  renderDashboard();
+  document.getElementById('sidebarToggle')?.addEventListener('click', () =>
+    document.querySelector('.admin-sidebar').classList.toggle('open'));
+}
+
+// ── PANEL NAVIGATION ──
+function switchPanel(panel) {
+  document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`[data-panel="${panel}"]`).classList.add('active');
+  document.getElementById('panel-' + panel).classList.add('active');
+  if (panel === 'dashboard') renderDashboard();
+  if (panel === 'calendar') renderAdminCalendar();
+  if (panel === 'appointments') renderAllAppointments();
+  if (panel === 'settings') renderSettings();
+  if (panel === 'services') renderServicesEditor();
+}
+
+// ── TOAST ──
+function showToast(msg, color = '#25D366') {
+  let t = document.getElementById('adminToast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'adminToast';
+    t.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e1118;color:#fff;padding:14px 28px;border-radius:50px;font-size:14px;font-weight:600;font-family:Heebo,sans-serif;z-index:9999;transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none;white-space:nowrap;';
+    document.body.appendChild(t);
+  }
+  t.style.borderLeft = `4px solid ${color}`;
+  t.textContent = msg;
+  t.style.transform = 'translateX(-50%) translateY(0)';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => { t.style.transform = 'translateX(-50%) translateY(80px)'; }, 2500);
+}
+
+// ── CONFIRM DIALOG ──
 function showConfirmDialog(msg, onConfirm) {
   let overlay = document.getElementById('confirmDialog');
   if (!overlay) {
@@ -21,95 +92,15 @@ function showConfirmDialog(msg, onConfirm) {
   document.getElementById('confirmDialogNo').onclick = () => { overlay.style.display = 'none'; };
 }
 
-// ── LOGIN ──
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('loginBtn').addEventListener('click', tryLogin);
-  document.getElementById('passInput').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
-  document.getElementById('logoutBtn').addEventListener('click', () => {
-    document.getElementById('adminWrap').classList.add('hidden');
-    document.getElementById('loginOverlay').classList.remove('hidden');
-    document.getElementById('passInput').value = '';
-  });
-  document.querySelectorAll('.admin-nav-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
-      if (btn.dataset.panel === 'dashboard') renderDashboard();
-      if (btn.dataset.panel === 'calendar') renderAdminCalendar();
-      if (btn.dataset.panel === 'appointments') renderAllAppointments();
-      if (btn.dataset.panel === 'settings') renderSettings();
-      if (btn.dataset.panel === 'services') renderServicesEditor();
-    });
-  });
-  document.getElementById('filterStatus').addEventListener('change', renderAllAppointments);
-  document.getElementById('filterDate').addEventListener('change', renderAllAppointments);
-  document.getElementById('clearFilter').addEventListener('click', () => {
-    document.getElementById('filterStatus').value = 'all';
-    document.getElementById('filterDate').value = '';
-    renderAllAppointments();
-  });
-  document.getElementById('saveSettings').addEventListener('click', saveSettingsHandler);
-  document.getElementById('addServiceBtn').addEventListener('click', () => {
-    const services = getServices();
-    services.push({ id: generateId(), name: 'שירות חדש', icon: '💅', duration: 60, price: '' });
-    saveServices(services);
-    renderServicesEditor();
-  });
-  document.getElementById('saveServices').addEventListener('click', saveServicesHandler);
-});
-
-function tryLogin() {
-  const pass = document.getElementById('passInput').value;
-  const settings = getSettings();
-  if (pass === settings.adminPass) {
-    document.getElementById('loginOverlay').classList.add('hidden');
-    document.getElementById('adminWrap').classList.remove('hidden');
-    initAdmin();
-  } else {
-    document.getElementById('loginErr').classList.remove('hidden');
-    document.getElementById('passInput').value = '';
-  }
-}
-
-
-function initAdmin() {
-  requestNotificationPermission();
-  renderDashboard();
-  // mobile sidebar toggle
-  document.getElementById('sidebarToggle')?.addEventListener('click', () =>
-    document.querySelector('.admin-sidebar').classList.toggle('open'));
-}
-
-function showToast(msg, color = '#25D366') {
-  let t = document.getElementById('adminToast');
-  if (!t) {
-    t = document.createElement('div');
-    t.id = 'adminToast';
-    t.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e1118;color:#fff;padding:14px 28px;border-radius:50px;font-size:14px;font-weight:600;font-family:Heebo,sans-serif;z-index:9999;transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none;white-space:nowrap;';
-    document.body.appendChild(t);
-  }
-  t.style.borderLeft = `4px solid ${color}`;
-  t.textContent = msg;
-  t.style.transform = 'translateX(-50%) translateY(0)';
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => { t.style.transform = 'translateX(-50%) translateY(80px)'; }, 2500);
-}
-
 // ── HELPERS ──
 function todayStr() { return new Date().toISOString().slice(0, 10); }
-function tomorrowStr() {
-  const d = new Date(); d.setDate(d.getDate() + 1);
-  return d.toISOString().slice(0, 10);
-}
-function weekEnd() {
-  const d = new Date(); d.setDate(d.getDate() + 7);
-  return d.toISOString().slice(0, 10);
-}
+function tomorrowStr() { const d = new Date(); d.setDate(d.getDate() + 1); return d.toISOString().slice(0, 10); }
+function weekEnd() { const d = new Date(); d.setDate(d.getDate() + 7); return d.toISOString().slice(0, 10); }
 
 const STATUS_LABELS = { pending: 'ממתין', confirmed: 'מאושר', completed: 'הושלם', cancelled: 'בוטל' };
 const STATUS_COLORS = { pending: '#f0a500', confirmed: '#25D366', completed: '#888', cancelled: '#e05' };
+
+function emptyMsg(txt) { return `<p class="empty-msg">${txt}</p>`; }
 
 function apptCard(appt, showDate = false) {
   const dateLabel = showDate ? `<span class="appt-date">${sanitize(formatDate(appt.date))}</span>` : '';
@@ -137,8 +128,6 @@ function apptCard(appt, showDate = false) {
   `;
 }
 
-function emptyMsg(txt) { return `<p class="empty-msg">${txt}</p>`; }
-
 // ── DASHBOARD ──
 function renderDashboard() {
   const all = getAppointments();
@@ -147,48 +136,41 @@ function renderDashboard() {
   const week = weekEnd();
 
   const todayAppts = all.filter(a => a.date === today && a.status !== 'cancelled');
-  const weekAppts = all.filter(a => a.date >= today && a.date <= week && a.status !== 'cancelled');
-  const pending = all.filter(a => a.status === 'pending');
+  const weekAppts  = all.filter(a => a.date >= today && a.date <= week && a.status !== 'cancelled');
+  const pending    = all.filter(a => a.status === 'pending');
 
-  document.getElementById('statToday').textContent = todayAppts.length;
-  document.getElementById('statWeek').textContent = weekAppts.length;
-  document.getElementById('statTotal').textContent = all.filter(a => a.status !== 'cancelled').length;
+  document.getElementById('statToday').textContent   = todayAppts.length;
+  document.getElementById('statWeek').textContent    = weekAppts.length;
+  document.getElementById('statTotal').textContent   = all.filter(a => a.status !== 'cancelled').length;
   document.getElementById('statPending').textContent = pending.length;
 
-  const todayList = document.getElementById('todayList');
-  const tomorrowList = document.getElementById('tomorrowList');
-
-  const todaySorted = todayAppts.sort((a, b) => a.time.localeCompare(b.time));
+  const todaySorted    = [...todayAppts].sort((a, b) => a.time.localeCompare(b.time));
   const tomorrowSorted = all.filter(a => a.date === tomorrow && a.status !== 'cancelled').sort((a, b) => a.time.localeCompare(b.time));
 
-  todayList.innerHTML = todaySorted.length ? todaySorted.map(a => apptCard(a)).join('') : emptyMsg('אין תורים היום');
-  tomorrowList.innerHTML = tomorrowSorted.length ? tomorrowSorted.map(a => apptCard(a)).join('') : emptyMsg('אין תורים מחר');
+  document.getElementById('todayList').innerHTML    = todaySorted.length    ? todaySorted.map(a => apptCard(a)).join('')    : emptyMsg('אין תורים היום');
+  document.getElementById('tomorrowList').innerHTML = tomorrowSorted.length ? tomorrowSorted.map(a => apptCard(a)).join('') : emptyMsg('אין תורים מחר');
 }
 
 // ── ADMIN CALENDAR ──
 let adminCalYear, adminCalMonth, adminSelectedDate;
 
 function renderAdminCalendar() {
-  if (!adminCalYear) {
-    const now = new Date();
-    adminCalYear = now.getFullYear();
-    adminCalMonth = now.getMonth();
-  }
+  if (!adminCalYear) { const now = new Date(); adminCalYear = now.getFullYear(); adminCalMonth = now.getMonth(); }
   const monthNames = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
   document.getElementById('adminCalTitle').textContent = `${monthNames[adminCalMonth]} ${adminCalYear}`;
 
-  const firstDay = new Date(adminCalYear, adminCalMonth, 1).getDay();
+  const firstDay    = new Date(adminCalYear, adminCalMonth, 1).getDay();
   const daysInMonth = new Date(adminCalYear, adminCalMonth + 1, 0).getDate();
-  const all = getAppointments();
-  const settings = getSettings();
+  const all         = getAppointments();
+  const settings    = getSettings();
 
   let html = '';
   for (let i = 0; i < firstDay; i++) html += '<div class="cal-cell empty"></div>';
   for (let d = 1; d <= daysInMonth; d++) {
-    const dateStr = `${adminCalYear}-${String(adminCalMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const count = all.filter(a => a.date === dateStr && a.status !== 'cancelled').length;
+    const dateStr   = `${adminCalYear}-${String(adminCalMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const count     = all.filter(a => a.date === dateStr && a.status !== 'cancelled').length;
     const isBlocked = settings.blockedDates.includes(dateStr);
-    const isWork = isWorkDay(dateStr);
+    const isWork    = isWorkDay(dateStr);
     const isSelected = adminSelectedDate === dateStr;
     let cls = 'cal-cell admin-cal-cell';
     if (isBlocked) cls += ' blocked';
@@ -199,28 +181,17 @@ function renderAdminCalendar() {
   }
   document.getElementById('adminCalGrid').innerHTML = html;
 
-  document.getElementById('adminPrevMonth').onclick = () => {
-    adminCalMonth--; if (adminCalMonth < 0) { adminCalMonth = 11; adminCalYear--; }
-    renderAdminCalendar();
-  };
-  document.getElementById('adminNextMonth').onclick = () => {
-    adminCalMonth++; if (adminCalMonth > 11) { adminCalMonth = 0; adminCalYear++; }
-    renderAdminCalendar();
-  };
+  document.getElementById('adminPrevMonth').onclick = () => { adminCalMonth--; if (adminCalMonth < 0) { adminCalMonth = 11; adminCalYear--; } renderAdminCalendar(); };
+  document.getElementById('adminNextMonth').onclick = () => { adminCalMonth++; if (adminCalMonth > 11) { adminCalMonth = 0; adminCalYear++; } renderAdminCalendar(); };
 }
 
 function adminSelectDay(dateStr) {
   adminSelectedDate = dateStr;
   renderAdminCalendar();
-  const appts = getAppointments().filter(a => a.date === dateStr && a.status !== 'cancelled')
-    .sort((a, b) => a.time.localeCompare(b.time));
+  const appts = getAppointments().filter(a => a.date === dateStr && a.status !== 'cancelled').sort((a, b) => a.time.localeCompare(b.time));
   document.getElementById('adminDayTitle').textContent = formatDate(dateStr);
-  document.getElementById('adminDayAppts').innerHTML = appts.length
-    ? appts.map(a => apptCard(a)).join('')
-    : emptyMsg('אין תורים ביום זה');
-
-  const settings = getSettings();
-  const isBlocked = settings.blockedDates.includes(dateStr);
+  document.getElementById('adminDayAppts').innerHTML = appts.length ? appts.map(a => apptCard(a)).join('') : emptyMsg('אין תורים ביום זה');
+  const isBlocked = getSettings().blockedDates.includes(dateStr);
   const blockBtn = document.getElementById('blockDayBtn');
   blockBtn.textContent = isBlocked ? '✅ בטל חסימה' : '🚫 חסום יום זה';
   blockBtn.onclick = () => toggleBlockDay(dateStr);
@@ -239,16 +210,19 @@ function toggleBlockDay(dateStr) {
 // ── ALL APPOINTMENTS ──
 function renderAllAppointments() {
   const statusFilter = document.getElementById('filterStatus').value;
-  const dateFilter = document.getElementById('filterDate').value;
+  const dateFilter   = document.getElementById('filterDate').value;
   let all = getAppointments();
   if (statusFilter !== 'all') all = all.filter(a => a.status === statusFilter);
   if (dateFilter) all = all.filter(a => a.date === dateFilter);
   all.sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
-  document.getElementById('allApptList').innerHTML = all.length
-    ? all.map(a => apptCard(a, true)).join('')
-    : emptyMsg('אין תורים');
+  document.getElementById('allApptList').innerHTML = all.length ? all.map(a => apptCard(a, true)).join('') : emptyMsg('אין תורים');
 }
 
+function clearFilters() {
+  document.getElementById('filterStatus').value = 'all';
+  document.getElementById('filterDate').value = '';
+  renderAllAppointments();
+}
 
 // ── APPOINTMENT ACTIONS ──
 function updateStatus(id, status) {
@@ -289,7 +263,6 @@ function renderSettings() {
   document.getElementById('slotInterval').value = settings.slotInterval;
   document.getElementById('waPhoneInput').value = settings.waPhone;
 
-  // work days
   const container = document.getElementById('workDaysEditor');
   container.innerHTML = Object.entries(settings.workDays).map(([dow, day]) => `
     <div class="work-day-row">
@@ -308,11 +281,10 @@ function renderSettings() {
     cb.addEventListener('change', () => {
       const row = cb.closest('.work-day-row');
       row.querySelector('.wd-start').disabled = !cb.checked;
-      row.querySelector('.wd-end').disabled = !cb.checked;
+      row.querySelector('.wd-end').disabled   = !cb.checked;
     });
   });
 
-  // blocked dates
   renderBlockedDates();
 
   document.getElementById('addBlockDate').onclick = () => {
@@ -333,8 +305,7 @@ function renderBlockedDates() {
         <div class="blocked-tag">
           ${formatDate(d)}
           <button onclick="removeBlockDate('${d}')">✕</button>
-        </div>
-      `).join('')
+        </div>`).join('')
     : '<p style="color:#aaa;font-size:13px">אין תאריכים חסומים</p>';
 }
 
@@ -358,7 +329,7 @@ function saveSettingsHandler() {
     settings.workDays[dow] = {
       active: cb.checked,
       start: row.querySelector('.wd-start').value,
-      end: row.querySelector('.wd-end').value,
+      end:   row.querySelector('.wd-end').value,
     };
   });
 
@@ -367,13 +338,13 @@ function saveSettingsHandler() {
   document.getElementById('newPassInput').value = '';
 }
 
-function saveServicesHandler() {
+// ── SERVICES EDITOR ──
 function renderServicesEditor() {
   const services = getServices();
   document.getElementById('servicesEditor').innerHTML = services.map((s, i) => `
     <div class="svc-edit-row" data-idx="${i}">
-      <input class="svc-icon" type="text" value="${s.icon}" placeholder="💅" maxlength="2"/>
-      <input class="svc-name" type="text" value="${s.name}" placeholder="שם שירות"/>
+      <input class="svc-icon"     type="text"   value="${s.icon}"     placeholder="💅" maxlength="2"/>
+      <input class="svc-name"     type="text"   value="${s.name}"     placeholder="שם שירות"/>
       <div class="svc-num-wrap">
         <label>דקות</label>
         <input class="svc-duration" type="number" value="${s.duration}" min="15" step="15"/>
@@ -394,14 +365,23 @@ function removeService(idx) {
   renderServicesEditor();
 }
 
-  const rows = document.querySelectorAll('.svc-edit-row');
+function addService() {
   const services = getServices();
-  rows.forEach((row, i) => {
-    services[i].icon = row.querySelector('.svc-icon').value;
-    services[i].name = row.querySelector('.svc-name').value;
-    services[i].duration = +row.querySelector('.svc-duration').value;
-    services[i].price = row.querySelector('.svc-price').value;
-  });
+  services.push({ id: generateId(), name: 'שירות חדש', icon: '💅', duration: 60, price: '' });
+  saveServices(services);
+  renderServicesEditor();
 }
 
-// ── SERVICES EDITOR ──
+function saveServicesHandler() {
+  const rows     = document.querySelectorAll('.svc-edit-row');
+  const services = getServices();
+  rows.forEach((row, i) => {
+    if (!services[i]) return;
+    services[i].icon     = row.querySelector('.svc-icon').value;
+    services[i].name     = row.querySelector('.svc-name').value;
+    services[i].duration = +row.querySelector('.svc-duration').value;
+    services[i].price    = row.querySelector('.svc-price').value;
+  });
+  saveServices(services);
+  showToast('✅ שירותים נשמרו בהצלחה!');
+}
