@@ -1,12 +1,20 @@
 // ── GOOGLE SHEETS + CALENDAR SYNC ──
 const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxAAZ1qzvkid1XkZJBH2dbIPUcJB5kraQZ1-UrgBoO48CHNEwN6thQAsrjNXa9g4Y1u1A/exec';
 
-async function saveToSheets(appt) {
+function saveToSheets(appt) {
   try {
-    const url = WEBAPP_URL + '?action=save&data=' + encodeURIComponent(JSON.stringify(appt));
-    // img trick - היחיד שעובד עם CORS של Google Apps Script
-    const img = new Image();
-    img.src = url;
+    const callbackName = 'saveCb_' + Date.now();
+    const url = WEBAPP_URL + '?action=save&data=' + encodeURIComponent(JSON.stringify(appt)) + '&callback=' + callbackName;
+    window[callbackName] = (res) => {
+      delete window[callbackName];
+      document.getElementById('saveScript')?.remove();
+      console.log('Sheets save:', res);
+    };
+    const s = document.createElement('script');
+    s.id = 'saveScript';
+    s.src = url;
+    s.onerror = () => console.warn('Save script error');
+    document.body.appendChild(s);
   } catch(e) { console.warn('Sheets sync failed:', e); }
 }
 
