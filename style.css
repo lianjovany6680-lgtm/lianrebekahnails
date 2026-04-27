@@ -24,6 +24,8 @@ body {
   cursor: none;
 }
 
+.hidden { display: none !important; }
+
 /* ── CUSTOM CURSOR ── */
 .cursor {
   width: 10px; height: 10px;
