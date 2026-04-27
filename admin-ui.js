@@ -52,6 +52,11 @@ function switchPanel(panel) {
   document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
   document.querySelector(`[data-panel="${panel}"]`).classList.add('active');
   document.getElementById('panel-' + panel).classList.add('active');
+  // update mobile title + close sidebar
+  const btn = document.querySelector(`[data-panel="${panel}"]`);
+  const titleEl = document.getElementById('sidebarTitle');
+  if (titleEl && btn) titleEl.textContent = btn.textContent;
+  document.querySelector('.admin-sidebar')?.classList.remove('open');
   if (panel === 'dashboard') renderDashboard();
   if (panel === 'calendar') renderAdminCalendar();
   if (panel === 'appointments') renderAllAppointments();

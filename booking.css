@@ -499,21 +499,81 @@
   .admin-sidebar { width: 180px; }
   .admin-main { margin-right: 180px; padding: 28px 20px; }
   .dash-stats { grid-template-columns: repeat(2, 1fr); }
+  .admin-cal-wrap { max-width: 100%; }
 }
+
 @media (max-width: 640px) {
-  .sidebar-toggle { display: block; }
+  /* ── ADMIN SIDEBAR MOBILE ── */
+  .sidebar-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; font-size: 20px; padding: 0; }
+  .admin-wrap { flex-direction: column; }
   .admin-sidebar {
-    width: 100%; height: auto; position: relative;
-    flex-direction: column; padding: 12px 16px;
-    gap: 0; overflow: hidden; max-height: 56px;
+    width: 100%;
+    height: auto;
+    position: relative;
+    flex-direction: column;
+    padding: 12px 16px;
+    overflow: hidden;
+    max-height: 52px;
     transition: max-height 0.35s ease;
   }
-  .admin-sidebar.open { max-height: 400px; }
+  .admin-sidebar.open { max-height: 500px; }
   .admin-logo { display: none; }
-  .admin-nav { flex-direction: row; flex-wrap: wrap; margin-top: 8px; }
-  .admin-nav-btn { padding: 8px 12px; font-size: 12px; }
-  .booking-card { padding: 28px 20px; }
-  .dash-stats { grid-template-columns: repeat(2, 1fr); }
-  .step-line { width: 28px; }
-  .work-day-row { flex-wrap: wrap; }
+  .admin-nav { flex-direction: column; gap: 4px; margin-top: 12px; }
+  .admin-nav-btn { padding: 12px 16px; font-size: 14px; text-align: right; }
+  .admin-logout { margin-top: 8px; }
+  .admin-main { margin-right: 0; padding: 16px 12px; }
+
+  /* ── DASHBOARD ── */
+  .admin-title { font-size: 24px; margin-bottom: 16px; }
+  .dash-stats { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+  .dash-stat { padding: 16px 12px; }
+  .dash-stat-num { font-size: 32px; }
+  .admin-section-title { font-size: 16px; }
+
+  /* ── APPOINTMENT CARDS ── */
+  .appt-card { padding: 14px 14px; }
+  .appt-service { font-size: 14px; }
+  .appt-card-actions { gap: 6px; }
+  .act-btn { padding: 6px 10px; font-size: 11px; }
+
+  /* ── CALENDAR ── */
+  .admin-cal-wrap { max-width: 100%; }
+  .cal-cell { font-size: 12px; border-radius: 6px; }
+  .cal-dot { width: 14px; height: 14px; font-size: 8px; }
+  .admin-day-view { padding: 16px; }
+  .admin-day-view h2 { font-size: 18px; }
+
+  /* ── SETTINGS ── */
+  .settings-section { padding: 18px 16px; }
+  .work-day-row { flex-wrap: wrap; gap: 8px; }
+  .wd-name { width: 50px; font-size: 13px; }
+  .work-day-row input[type="time"] { font-size: 13px; padding: 6px 8px; }
+  .appt-filters { flex-direction: column; align-items: stretch; }
+  .appt-filters select, .appt-filters input[type="date"] { width: 100%; }
+
+  /* ── SERVICES EDITOR ── */
+  .svc-edit-row { gap: 8px; padding: 12px; }
+  .svc-name { min-width: 100px; }
+  .svc-num-wrap input { width: 64px; }
+
+  /* ── BOOKING PAGE ── */
+  .booking-main { padding: 90px 12px 60px; }
+  .booking-card { padding: 24px 16px; border-radius: 20px; }
+  .booking-card h2 { font-size: 22px; margin-bottom: 20px; }
+  .booking-header h1 { font-size: clamp(28px, 8vw, 48px); }
+  .booking-header p { font-size: 14px; }
+  .step-line { width: 20px; }
+  .step span { width: 30px; height: 30px; font-size: 12px; }
+  .step p { font-size: 10px; }
+  .service-pick-card { padding: 14px 16px; gap: 14px; }
+  .spc-icon { font-size: 26px; }
+  .spc-info h3 { font-size: 15px; }
+  .slots-grid { grid-template-columns: repeat(auto-fill, minmax(68px, 1fr)); gap: 8px; }
+  .slot-btn { padding: 10px 6px; font-size: 13px; }
+  .step-nav { flex-direction: column-reverse; gap: 10px; }
+  .step-nav .btn-next, .step-nav .btn-confirm { width: 100%; text-align: center; justify-content: center; }
+  .step-nav .btn-back { width: 100%; text-align: center; }
+  .confirm-details { min-width: unset; width: 100%; }
+  .confirm-btns { flex-direction: column; align-items: center; }
+  .login-box { width: 90%; padding: 32px 24px; }
 }
