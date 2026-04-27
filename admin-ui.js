@@ -22,15 +22,9 @@ function tryLogin() {
   console.log('correctPass:', correctPass);
   console.log('settings:', JSON.stringify(settings));
   if (pass === correctPass) {
-    console.log('login success - hiding overlay');
-    const overlay = document.getElementById('loginOverlay');
-    const wrap = document.getElementById('adminWrap');
-    console.log('overlay classes before:', overlay.className);
-    console.log('wrap classes before:', wrap.className);
-    overlay.classList.add('hidden');
-    wrap.classList.remove('hidden');
-    console.log('overlay classes after:', overlay.className);
-    console.log('wrap classes after:', wrap.className);
+    console.log('login success');
+    document.getElementById('loginOverlay').style.display = 'none';
+    document.getElementById('adminWrap').style.display = 'flex';
     initAdmin();
   } else {
     document.getElementById('loginErr').classList.remove('hidden');
@@ -39,10 +33,10 @@ function tryLogin() {
 }
 
 function doLogout() {
-  document.getElementById('adminWrap').classList.add('hidden');
-  document.getElementById('loginOverlay').classList.remove('hidden');
+  document.getElementById('adminWrap').style.display = 'none';
+  document.getElementById('loginOverlay').style.display = 'flex';
   document.getElementById('passInput').value = '';
-  document.getElementById('loginErr').classList.add('hidden');
+  document.getElementById('loginErr').style.display = 'none';
 }
 
 function initAdmin() {
