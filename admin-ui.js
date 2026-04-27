@@ -64,6 +64,24 @@ document.querySelectorAll('.admin-nav-btn').forEach(btn => {
 function initAdmin() {
   requestNotificationPermission();
   renderDashboard();
+  // mobile sidebar toggle
+  document.getElementById('sidebarToggle')?.addEventListener('click', () =>
+    document.querySelector('.admin-sidebar').classList.toggle('open'));
+}
+
+function showToast(msg, color = '#25D366') {
+  let t = document.getElementById('adminToast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'adminToast';
+    t.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e1118;color:#fff;padding:14px 28px;border-radius:50px;font-size:14px;font-weight:600;font-family:Heebo,sans-serif;z-index:9999;transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none;white-space:nowrap;';
+    document.body.appendChild(t);
+  }
+  t.style.borderLeft = `4px solid ${color}`;
+  t.textContent = msg;
+  t.style.transform = 'translateX(-50%) translateY(0)';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => { t.style.transform = 'translateX(-50%) translateY(80px)'; }, 2500);
 }
 
 // ── HELPERS ──
@@ -339,9 +357,8 @@ document.getElementById('saveSettings').addEventListener('click', () => {
   });
 
   saveSettings(settings);
-  const msg = document.getElementById('saveMsg');
-  msg.classList.remove('hidden');
-  setTimeout(() => msg.classList.add('hidden'), 2500);
+  showToast('✅ הגדרות נשמרו בהצלחה!');
+  document.getElementById('newPassInput').value = '';
 });
 
 // ── SERVICES EDITOR ──
@@ -388,7 +405,5 @@ document.getElementById('saveServices').addEventListener('click', () => {
     services[i].price = row.querySelector('.svc-price').value;
   });
   saveServices(services);
-  const msg = document.getElementById('saveSvcMsg');
-  msg.classList.remove('hidden');
-  setTimeout(() => msg.classList.add('hidden'), 2500);
+  showToast('✅ שירותים נשמרו בהצלחה!');
 });

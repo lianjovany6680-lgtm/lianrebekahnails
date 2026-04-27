@@ -125,9 +125,8 @@ function renderCalendar() {
 function selectDate(dateStr) {
   selected.date = dateStr;
   selected.time = null;
-  document.querySelectorAll('.cal-cell').forEach(c => c.classList.remove('selected'));
-  event.target.classList.add('selected');
   document.getElementById('toStep3').disabled = false;
+  renderCalendar();
 }
 
 // ── STEP 3: SLOTS ──
@@ -160,9 +159,9 @@ function selectSlot(time, el) {
 // ── STEP 4: SUMMARY + FORM ──
 function renderSummaryMini() {
   document.getElementById('summaryMini').innerHTML = `
-    <div class="summary-row"><span>${selected.service.icon} ${selected.service.name}</span></div>
-    <div class="summary-row"><span>📅 ${formatDate(selected.date)}</span></div>
-    <div class="summary-row"><span>🕐 ${selected.time}</span></div>
+    <div class="summary-row"><span>${sanitize(selected.service.icon)} ${sanitize(selected.service.name)}</span></div>
+    <div class="summary-row"><span>📅 ${sanitize(formatDate(selected.date))}</span></div>
+    <div class="summary-row"><span>🕐 ${sanitize(selected.time)}</span></div>
   `;
 }
 
@@ -172,10 +171,9 @@ function submitBooking(e) {
   const phone = document.getElementById('clientPhone').value.trim();
   const notes = document.getElementById('clientNotes').value.trim();
 
-  if (!name || !phone) {
-    showFormError('אנא מלאי שם וטלפון');
-    return;
-  }
+  if (!name) { showFormError('אנא הכניסי שם מלא'); return; }
+  if (!phone) { showFormError('אנא הכניסי מספר טלפון'); return; }
+  if (!/^[0-9+\-\s]{9,15}$/.test(phone)) { showFormError('מספר טלפון לא תקין'); return; }
 
   const appt = {
     id: generateId(),
@@ -214,8 +212,5 @@ function showConfirmation(appt) {
   const msg = `היי ליאן! 💅\nקבעתי תור:\n✨ ${appt.serviceName}\n📅 ${formatDate(appt.date)}\n🕐 ${appt.time}\n👤 ${appt.clientName}\n📞 ${appt.clientPhone}${appt.notes ? '\n📝 ' + appt.notes : ''}`;
   document.getElementById('confirmWA').href = `https://wa.me/${settings.waPhone}?text=${encodeURIComponent(msg)}`;
 
-  // auto-open whatsapp after short delay
-  setTimeout(() => {
-    window.open(`https://wa.me/${settings.waPhone}?text=${encodeURIComponent(msg)}`, '_blank');
-  }, 800);
+  // show whatsapp button - don't auto-open (blocked on mobile)
 }
