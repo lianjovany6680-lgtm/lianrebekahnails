@@ -1,3 +1,10 @@
+// ── SANITIZE ──
+function sanitize(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
 // ── DATA STORE ──
 const DB = {
   get: (key, def) => { try { return JSON.parse(localStorage.getItem(key)) ?? def; } catch { return def; } },

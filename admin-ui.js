@@ -1,3 +1,26 @@
+// ── CUSTOM CONFIRM DIALOG ──
+function showConfirmDialog(msg, onConfirm) {
+  let overlay = document.getElementById('confirmDialog');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'confirmDialog';
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;';
+    overlay.innerHTML = `
+      <div style="background:#fff;border-radius:20px;padding:32px 28px;max-width:320px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+        <p id="confirmDialogMsg" style="font-size:16px;color:#1e1118;margin-bottom:24px;line-height:1.6;"></p>
+        <div style="display:flex;gap:12px;justify-content:center;">
+          <button id="confirmDialogNo" style="padding:10px 24px;border:2px solid #e0e0e0;border-radius:20px;background:none;cursor:pointer;font-family:Heebo,sans-serif;font-size:14px;color:#888;">בטל</button>
+          <button id="confirmDialogYes" style="padding:10px 24px;border:none;border-radius:20px;background:#e05;color:#fff;cursor:pointer;font-family:Heebo,sans-serif;font-size:14px;font-weight:700;">מחק</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+  }
+  document.getElementById('confirmDialogMsg').textContent = msg;
+  overlay.style.display = 'flex';
+  document.getElementById('confirmDialogYes').onclick = () => { overlay.style.display = 'none'; onConfirm(); };
+  document.getElementById('confirmDialogNo').onclick = () => { overlay.style.display = 'none'; };
+}
+
 // ── LOGIN ──
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('loginBtn').addEventListener('click', tryLogin);
@@ -58,26 +81,26 @@ const STATUS_LABELS = { pending: 'ממתין', confirmed: 'מאושר', complete
 const STATUS_COLORS = { pending: '#f0a500', confirmed: '#25D366', completed: '#888', cancelled: '#e05' };
 
 function apptCard(appt, showDate = false) {
-  const dateLabel = showDate ? `<span class="appt-date">${formatDate(appt.date)}</span>` : '';
+  const dateLabel = showDate ? `<span class="appt-date">${sanitize(formatDate(appt.date))}</span>` : '';
   return `
-    <div class="appt-card status-${appt.status}" data-id="${appt.id}">
+    <div class="appt-card status-${sanitize(appt.status)}" data-id="${sanitize(appt.id)}">
       <div class="appt-card-top">
-        <span class="appt-service">${appt.serviceIcon} ${appt.serviceName}</span>
+        <span class="appt-service">${sanitize(appt.serviceIcon)} ${sanitize(appt.serviceName)}</span>
         <span class="appt-status" style="color:${STATUS_COLORS[appt.status]}">${STATUS_LABELS[appt.status]}</span>
       </div>
       ${dateLabel}
       <div class="appt-card-info">
-        <span>🕐 ${appt.time} (${appt.duration} דק')</span>
-        <span>👤 ${appt.clientName}</span>
-        <span>📞 <a href="tel:${appt.clientPhone}">${appt.clientPhone}</a></span>
-        ${appt.notes ? `<span>📝 ${appt.notes}</span>` : ''}
+        <span>🕐 ${sanitize(appt.time)} (${sanitize(String(appt.duration))} דק')</span>
+        <span>👤 ${sanitize(appt.clientName)}</span>
+        <span>📞 <a href="tel:${sanitize(appt.clientPhone)}">${sanitize(appt.clientPhone)}</a></span>
+        ${appt.notes ? `<span>📝 ${sanitize(appt.notes)}</span>` : ''}
       </div>
       <div class="appt-card-actions">
-        ${appt.status === 'pending' ? `<button onclick="updateStatus('${appt.id}','confirmed')" class="act-btn confirm">✓ אשר</button>` : ''}
-        ${appt.status !== 'completed' && appt.status !== 'cancelled' ? `<button onclick="updateStatus('${appt.id}','completed')" class="act-btn complete">✔ הושלם</button>` : ''}
-        ${appt.status !== 'cancelled' ? `<button onclick="updateStatus('${appt.id}','cancelled')" class="act-btn cancel">✕ בטל</button>` : ''}
-        <button onclick="sendReminderWA('${appt.id}')" class="act-btn wa">💬 וואטסאפ</button>
-        <button onclick="deleteAppt('${appt.id}')" class="act-btn del">🗑</button>
+        ${appt.status === 'pending' ? `<button onclick="updateStatus('${sanitize(appt.id)}','confirmed')" class="act-btn confirm">✓ אשר</button>` : ''}
+        ${appt.status !== 'completed' && appt.status !== 'cancelled' ? `<button onclick="updateStatus('${sanitize(appt.id)}','completed')" class="act-btn complete">✔ הושלם</button>` : ''}
+        ${appt.status !== 'cancelled' ? `<button onclick="updateStatus('${sanitize(appt.id)}','cancelled')" class="act-btn cancel">✕ בטל</button>` : ''}
+        <button onclick="sendReminderWA('${sanitize(appt.id)}')" class="act-btn wa">💬 וואטסאפ</button>
+        <button onclick="deleteAppt('${sanitize(appt.id)}')" class="act-btn del">🗑</button>
       </div>
     </div>
   `;
@@ -214,9 +237,10 @@ function updateStatus(id, status) {
 }
 
 function deleteAppt(id) {
-  if (!confirm('למחוק תור זה לצמיתות?')) return;
-  saveAppointments(getAppointments().filter(a => a.id !== id));
-  refreshCurrentPanel();
+  showConfirmDialog('למחוק תור זה לצמיתות?', () => {
+    saveAppointments(getAppointments().filter(a => a.id !== id));
+    refreshCurrentPanel();
+  });
 }
 
 function sendReminderWA(id) {

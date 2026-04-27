@@ -21,6 +21,19 @@ function bindMobileMenu() {
     l.addEventListener('click', () => document.getElementById('mobileMenu').classList.remove('open')));
 }
 
+// ── CUSTOM TOAST / DIALOG ──
+function showFormError(msg) {
+  let el = document.getElementById('formError');
+  if (!el) {
+    el = document.createElement('p');
+    el.id = 'formError';
+    el.style.cssText = 'color:#e05;font-size:13px;font-weight:600;margin-top:-8px;margin-bottom:8px;';
+    document.getElementById('bookingForm').prepend(el);
+  }
+  el.textContent = msg;
+  setTimeout(() => { el.textContent = ''; }, 3000);
+}
+
 // ── STEP NAVIGATION ──
 function showStep(n) {
   document.querySelectorAll('.booking-step').forEach(s => s.classList.add('hidden'));
@@ -160,7 +173,7 @@ function submitBooking(e) {
   const notes = document.getElementById('clientNotes').value.trim();
 
   if (!name || !phone) {
-    alert('אנא מלאי שם וטלפון');
+    showFormError('אנא מלאי שם וטלפון');
     return;
   }
 
@@ -191,10 +204,10 @@ function submitBooking(e) {
 function showConfirmation(appt) {
   showStep(5);
   document.getElementById('confirmDetails').innerHTML = `
-    <div class="confirm-row">${appt.serviceIcon} <strong>${appt.serviceName}</strong></div>
-    <div class="confirm-row">📅 <strong>${formatDate(appt.date)}</strong></div>
-    <div class="confirm-row">🕐 <strong>${appt.time}</strong></div>
-    <div class="confirm-row">👤 <strong>${appt.clientName}</strong></div>
+    <div class="confirm-row">${sanitize(appt.serviceIcon)} <strong>${sanitize(appt.serviceName)}</strong></div>
+    <div class="confirm-row">📅 <strong>${sanitize(formatDate(appt.date))}</strong></div>
+    <div class="confirm-row">🕐 <strong>${sanitize(appt.time)}</strong></div>
+    <div class="confirm-row">👤 <strong>${sanitize(appt.clientName)}</strong></div>
   `;
 
   const settings = getSettings();
