@@ -4,7 +4,10 @@ const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxAAZ1qzvkid1XkZJBH2
 async function saveToSheets(appt) {
   try {
     const url = WEBAPP_URL + '?action=save&data=' + encodeURIComponent(JSON.stringify(appt));
-    await fetch(url, { mode: 'no-cors' });
+    console.log('Saving to sheets:', url);
+    const res = await fetch(url);
+    const text = await res.text();
+    console.log('Sheets response:', text);
   } catch(e) { console.warn('Sheets sync failed:', e); }
 }
 
