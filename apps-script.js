@@ -1,5 +1,3 @@
-// ── העתיקי את הקוד הזה ל-Apps Script ──
-
 const SHEET_ID = '1lDnpOmrZx4dL2ydVZIHQFvQaisdLE469tYeYIOX84iI';
 const CAL_NAME = 'Lian Rebekah Nails 💅';
 
@@ -22,39 +20,46 @@ function getOrCreateCalendar() {
 }
 
 function doGet(e) {
-  const action = e.parameter.action || 'load';
+  const action   = e.parameter.action   || 'load';
+  const callback = e.parameter.callback || null;
 
   if (action === 'save') {
     try {
       const data = JSON.parse(decodeURIComponent(e.parameter.data));
       saveAppointment(data);
-      return ContentService.createTextOutput(JSON.stringify({success:true}))
-        .setMimeType(ContentService.MimeType.JSON);
+      const json = JSON.stringify({ success: true });
+      const out  = callback ? callback + '(' + json + ')' : json;
+      return ContentService.createTextOutput(out)
+        .setMimeType(callback ? ContentService.MimeType.JAVASCRIPT : ContentService.MimeType.JSON);
     } catch(err) {
-      return ContentService.createTextOutput(JSON.stringify({success:false, error:err.message}))
-        .setMimeType(ContentService.MimeType.JSON);
+      const json = JSON.stringify({ success: false, error: err.message });
+      const out  = callback ? callback + '(' + json + ')' : json;
+      return ContentService.createTextOutput(out)
+        .setMimeType(callback ? ContentService.MimeType.JAVASCRIPT : ContentService.MimeType.JSON);
     }
   }
 
   // action === 'load'
   try {
     const sheet = getSheet();
-    if (sheet.getLastRow() <= 1) {
-      return ContentService.createTextOutput(JSON.stringify([]))
-        .setMimeType(ContentService.MimeType.JSON);
+    let result = [];
+    if (sheet.getLastRow() > 1) {
+      const rows    = sheet.getDataRange().getValues();
+      const headers = rows[0];
+      result = rows.slice(1).map(row => {
+        const obj = {};
+        headers.forEach((h, i) => obj[h] = row[i]);
+        return obj;
+      });
     }
-    const rows = sheet.getDataRange().getValues();
-    const headers = rows[0];
-    const result = rows.slice(1).map(row => {
-      const obj = {};
-      headers.forEach((h, i) => obj[h] = row[i]);
-      return obj;
-    });
-    return ContentService.createTextOutput(JSON.stringify(result))
-      .setMimeType(ContentService.MimeType.JSON);
+    const json = JSON.stringify(result);
+    const out  = callback ? callback + '(' + json + ')' : json;
+    return ContentService.createTextOutput(out)
+      .setMimeType(callback ? ContentService.MimeType.JAVASCRIPT : ContentService.MimeType.JSON);
   } catch(err) {
-    return ContentService.createTextOutput(JSON.stringify([]))
-      .setMimeType(ContentService.MimeType.JSON);
+    const out = callback ? callback + '([])' : '[]';
+    return ContentService.createTextOutput(out)
+      .setMimeType(callback ? ContentService.MimeType.JAVASCRIPT : ContentService.MimeType.JSON);
   }
 }
 
@@ -62,44 +67,38 @@ function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
     saveAppointment(data);
-    return ContentService.createTextOutput(JSON.stringify({success:true}))
+    return ContentService.createTextOutput(JSON.stringify({ success: true }))
       .setMimeType(ContentService.MimeType.JSON);
   } catch(err) {
-    return ContentService.createTextOutput(JSON.stringify({success:false, error:err.message}))
+    return ContentService.createTextOutput(JSON.stringify({ success: false, error: err.message }))
       .setMimeType(ContentService.MimeType.JSON);
   }
 }
 
 function saveAppointment(data) {
   const sheet = getSheet();
-
-  // בדוק אם כבר קיים
-  const ids = sheet.getRange(2, 1, Math.max(sheet.getLastRow()-1,1), 1).getValues().flat();
-  if (ids.includes(data.id)) return;
+  const ids = sheet.getLastRow() > 1
+    ? sheet.getRange(2, 1, sheet.getLastRow() - 1, 1).getValues().flat().map(String)
+    : [];
+  if (ids.includes(String(data.id))) return;
 
   sheet.appendRow([
-    data.id,
-    data.serviceName,
-    data.date,
-    data.time,
-    data.clientName,
-    data.clientPhone,
-    data.notes || '',
+    data.id, data.serviceName, data.date, data.time,
+    data.clientName, data.clientPhone, data.notes || '',
     data.status || 'pending',
     new Date().toLocaleString('he-IL')
   ]);
 
-  // הוסף ל-Google Calendar
   try {
     const cal = getOrCreateCalendar();
-    const [y,m,d] = data.date.split('-').map(Number);
-    const [h,min] = data.time.split(':').map(Number);
-    const start = new Date(y, m-1, d, h, min);
-    const end   = new Date(y, m-1, d, h, min + (Number(data.duration) || 60));
+    const [y, m, d] = data.date.split('-').map(Number);
+    const [h, min]  = data.time.split(':').map(Number);
+    const start = new Date(y, m - 1, d, h, min);
+    const end   = new Date(y, m - 1, d, h, min + (Number(data.duration) || 60));
     cal.createEvent(
-      `💅 ${data.serviceName} - ${data.clientName}`,
+      '💅 ' + data.serviceName + ' - ' + data.clientName,
       start, end,
-      { description: `📞 ${data.clientPhone}\n📝 ${data.notes || '-'}` }
+      { description: '📞 ' + data.clientPhone + '\n📝 ' + (data.notes || '-') }
     );
   } catch(calErr) {
     console.warn('Calendar error:', calErr);

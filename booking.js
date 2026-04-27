@@ -4,34 +4,42 @@ const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxAAZ1qzvkid1XkZJBH2
 async function saveToSheets(appt) {
   try {
     const url = WEBAPP_URL + '?action=save&data=' + encodeURIComponent(JSON.stringify(appt));
-    console.log('Saving to sheets:', url);
-    const res = await fetch(url);
-    const text = await res.text();
-    console.log('Sheets response:', text);
+    // img trick - היחיד שעובד עם CORS של Google Apps Script
+    const img = new Image();
+    img.src = url;
   } catch(e) { console.warn('Sheets sync failed:', e); }
 }
 
 async function loadFromSheets() {
-  try {
-    const url = WEBAPP_URL + '?action=load';
-    const res = await fetch(url);
-    const rows = await res.json();
-    if (!Array.isArray(rows) || rows.length === 0) return null;
-    const appts = rows.map(r => ({
-      id:          String(r['דיID'] || r['ID'] || r['id'] || ''),
-      serviceName: String(r['שירות'] || ''),
-      serviceIcon: '💅',
-      date:        String(r['תאריך'] || ''),
-      time:        String(r['שעה'] || ''),
-      clientName:  String(r['שם לקוחה'] || ''),
-      clientPhone: String(r['טלפון'] || ''),
-      notes:       String(r['הערות'] || ''),
-      status:      String(r['סטטוס'] || 'pending'),
-      duration:    60,
-    })).filter(a => a.id && a.date);
-    saveAppointments(appts);
-    return appts;
-  } catch(e) { console.warn('Sheets load failed:', e); return null; }
+  return new Promise((resolve) => {
+    const callbackName = 'sheetsCallback_' + Date.now();
+    const url = WEBAPP_URL + '?action=load&callback=' + callbackName;
+    window[callbackName] = (rows) => {
+      delete window[callbackName];
+      document.getElementById('jsonpScript')?.remove();
+      if (!Array.isArray(rows) || rows.length === 0) { resolve(null); return; }
+      const appts = rows.map(r => ({
+        id:          String(r['ID'] || ''),
+        serviceName: String(r['שירות'] || ''),
+        serviceIcon: '💅',
+        date:        String(r['תאריך'] || ''),
+        time:        String(r['שעה'] || ''),
+        clientName:  String(r['שם לקוחה'] || ''),
+        clientPhone: String(r['טלפון'] || ''),
+        notes:       String(r['הערות'] || ''),
+        status:      String(r['סטטוס'] || 'pending'),
+        duration:    60,
+      })).filter(a => a.id && a.date);
+      saveAppointments(appts);
+      resolve(appts);
+    };
+    const script = document.createElement('script');
+    script.id = 'jsonpScript';
+    script.src = url;
+    script.onerror = () => { resolve(null); };
+    document.body.appendChild(script);
+    setTimeout(() => { delete window[callbackName]; resolve(null); }, 8000);
+  });
 }
 
 // ── SANITIZE ──
