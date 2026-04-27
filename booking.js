@@ -7,30 +7,25 @@ function saveToSheets(appt) {
     date: appt.date, time: appt.time, clientName: appt.clientName,
     clientPhone: appt.clientPhone, notes: appt.notes || '', status: appt.status,
   };
-  // שולחים דרך form בתוך iframe נסתר - עובד עם CORS
-  const iframe = document.createElement('iframe');
-  iframe.name = 'sheetsFrame';
-  iframe.style.display = 'none';
-  document.body.appendChild(iframe);
-
-  const form = document.createElement('form');
-  form.method = 'POST';
-  form.action = WEBAPP_URL;
-  form.target = 'sheetsFrame';
-  form.style.display = 'none';
-
-  const input = document.createElement('input');
-  input.type = 'hidden';
-  input.name = 'payload';
-  input.value = JSON.stringify(slim);
-  form.appendChild(input);
-  document.body.appendChild(form);
-  form.submit();
-
-  setTimeout(() => {
-    form.remove();
-    iframe.remove();
-  }, 5000);
+  // JSONP דרך doGet - זה עבד בבדיקה
+  const cb = 'sc' + Date.now();
+  const url = WEBAPP_URL
+    + '?action=save'
+    + '&callback=' + cb
+    + '&id='          + encodeURIComponent(slim.id)
+    + '&serviceName=' + encodeURIComponent(slim.serviceName)
+    + '&duration='    + slim.duration
+    + '&date='        + slim.date
+    + '&time='        + encodeURIComponent(slim.time)
+    + '&clientName='  + encodeURIComponent(slim.clientName)
+    + '&clientPhone=' + encodeURIComponent(slim.clientPhone)
+    + '&notes='       + encodeURIComponent(slim.notes)
+    + '&status='      + slim.status;
+  window[cb] = (res) => { delete window[cb]; document.getElementById(cb)?.remove(); };
+  const s = document.createElement('script');
+  s.id = cb;
+  s.src = url;
+  document.body.appendChild(s);
 }
 
 async function loadFromSheets() {

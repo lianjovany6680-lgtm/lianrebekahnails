@@ -166,6 +166,13 @@ function _renderDashboard() {
 
   document.getElementById('todayList').innerHTML    = todaySorted.length    ? todaySorted.map(a => apptCard(a)).join('')    : emptyMsg('אין תורים היום');
   document.getElementById('tomorrowList').innerHTML = tomorrowSorted.length ? tomorrowSorted.map(a => apptCard(a)).join('') : emptyMsg('אין תורים מחר');
+
+  // תורים קרובים - 7 ימים הבאים
+  const upcomingSorted = all
+    .filter(a => a.date > tomorrow && a.date <= week && a.status !== 'cancelled')
+    .sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+  const upcomingEl = document.getElementById('upcomingList');
+  if (upcomingEl) upcomingEl.innerHTML = upcomingSorted.length ? upcomingSorted.map(a => apptCard(a, true)).join('') : emptyMsg('אין תורים קרובים');
 }
 
 // ── ADMIN CALENDAR ──
