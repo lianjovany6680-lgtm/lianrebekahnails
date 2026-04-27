@@ -1,5 +1,6 @@
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOM loaded, settings:', JSON.stringify(getSettings()));
   document.getElementById('loginBtn').addEventListener('click', tryLogin);
   document.getElementById('passInput').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
   document.getElementById('logoutBtn').addEventListener('click', doLogout);
@@ -17,6 +18,9 @@ function tryLogin() {
   const pass = document.getElementById('passInput').value.trim();
   const settings = getSettings();
   const correctPass = settings.adminPass || '12341234';
+  console.log('pass entered:', pass);
+  console.log('correctPass:', correctPass);
+  console.log('settings:', JSON.stringify(settings));
   if (pass === correctPass) {
     document.getElementById('loginOverlay').classList.add('hidden');
     document.getElementById('adminWrap').classList.remove('hidden');
