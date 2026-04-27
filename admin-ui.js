@@ -14,9 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ── LOGIN ──
 function tryLogin() {
-  const pass = document.getElementById('passInput').value;
+  const pass = document.getElementById('passInput').value.trim();
   const settings = getSettings();
-  if (pass === settings.adminPass) {
+  const correctPass = settings.adminPass || '12341234';
+  if (pass === correctPass) {
     document.getElementById('loginOverlay').classList.add('hidden');
     document.getElementById('adminWrap').classList.remove('hidden');
     initAdmin();
