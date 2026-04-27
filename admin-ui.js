@@ -41,7 +41,8 @@ function doLogout() {
 
 function initAdmin() {
   requestNotificationPermission();
-  renderDashboard();
+  // טען תורים מ-Google Sheets
+  loadFromSheets().then(() => renderDashboard());
   document.getElementById('sidebarToggle')?.addEventListener('click', () =>
     document.querySelector('.admin-sidebar').classList.toggle('open'));
 }
@@ -139,8 +140,13 @@ function apptCard(appt, showDate = false) {
   `;
 }
 
-// ── DASHBOARD ──
 function renderDashboard() {
+  loadFromSheets().then(() => {
+    _renderDashboard();
+  });
+}
+
+function _renderDashboard() {
   const all = getAppointments();
   const today = todayStr();
   const tomorrow = tomorrowStr();
@@ -257,6 +263,11 @@ function sendReminderWA(id) {
   if (!appt) return;
   const msg = `היי ${appt.clientName}! 💅\nתזכורת לתור שלך:\n✨ ${appt.serviceName}\n📅 ${formatDate(appt.date)}\n🕐 ${appt.time}\nמחכה לך! 🌸`;
   window.open(`https://wa.me/${appt.clientPhone.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+function syncSheets() {
+  showToast('🔄 מסנכרן...');
+  loadFromSheets().then(() => { _renderDashboard(); showToast('✅ סונכרן בהצלחה!'); });
 }
 
 function refreshCurrentPanel() {

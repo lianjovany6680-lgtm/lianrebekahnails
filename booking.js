@@ -1,3 +1,40 @@
+// ── GOOGLE SHEETS + CALENDAR SYNC ──
+const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxAAZ1qzvkid1XkZJBH2dbIPUcJB5kraQZ1-UrgBoO48CHNEwN6thQAsrjNXa9g4Y1u1A/exec';
+
+async function saveToSheets(appt) {
+  try {
+    await fetch(WEBAPP_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(appt),
+    });
+  } catch(e) { console.warn('Sheets sync failed:', e); }
+}
+
+async function loadFromSheets() {
+  try {
+    const res = await fetch(WEBAPP_URL);
+    const rows = await res.json();
+    if (!Array.isArray(rows) || rows.length === 0) return;
+    // המר שורות לפורמט של האתר
+    const appts = rows.map(r => ({
+      id:          String(r['ID'] || r['id'] || ''),
+      serviceName: String(r['שירות'] || ''),
+      serviceIcon: '💅',
+      date:        String(r['תאריך'] || ''),
+      time:        String(r['שעה'] || ''),
+      clientName:  String(r['שם לקוחה'] || ''),
+      clientPhone: String(r['טלפון'] || ''),
+      notes:       String(r['הערות'] || ''),
+      status:      String(r['סטטוס'] || 'pending'),
+      duration:    60,
+    })).filter(a => a.id && a.date);
+    saveAppointments(appts);
+    return appts;
+  } catch(e) { console.warn('Sheets load failed:', e); return null; }
+}
+
 // ── SANITIZE ──
 function sanitize(str) {
   const d = document.createElement('div');

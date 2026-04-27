@@ -484,6 +484,21 @@
 }
 .btn-add-service:hover { background: #fde8f0; }
 
+.btn-sync {
+  background: rgba(201,122,150,0.12);
+  border: 1.5px solid var(--pink);
+  color: var(--dark-pink);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-family: 'Heebo', sans-serif;
+  cursor: pointer;
+  margin-right: 12px;
+  vertical-align: middle;
+  transition: all 0.2s;
+}
+.btn-sync:hover { background: var(--dark-pink); color: #fff; }
+
 /* ── SAVE MSG ── */
 .save-msg { color: #25D366; font-weight: 600; font-size: 14px; margin-top: 12px; }
 

@@ -193,7 +193,7 @@ function submitBooking(e) {
   const appointments = getAppointments();
   appointments.push(appt);
   saveAppointments(appointments);
-
+  saveToSheets(appt); // שמירה ב-Google Sheets
   scheduleAppointmentReminders(appt);
   showConfirmation(appt);
 }
