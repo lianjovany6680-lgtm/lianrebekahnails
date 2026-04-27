@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>קביעת תור | Lian Rebekah Nails</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="booking.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Heebo:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#c97a96"/>
+</head>
+<body class="booking-page">
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <a href="index.html"><img src="Screenshot 2026-03-27 122808.png" alt="Lian Rebekah Nails" class="logo"/></a>
+    <ul>
+      <li><a href="index.html#about">אודות</a></li>
+      <li><a href="index.html#services">שירותים</a></li>
+      <li><a href="index.html#gallery">גלריה</a></li>
+      <li><a href="index.html#reviews">ביקורות</a></li>
+      <li><a href="booking.html" class="nav-cta">קביעת תור</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger">&#9776;</button>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="close-menu" id="closeMenu">✕</button>
+    <ul>
+      <li><a href="index.html#about" class="mob-link">אודות</a></li>
+      <li><a href="index.html#services" class="mob-link">שירותים</a></li>
+      <li><a href="index.html#gallery" class="mob-link">גלריה</a></li>
+      <li><a href="index.html#reviews" class="mob-link">ביקורות</a></li>
+      <li><a href="booking.html" class="mob-link">קביעת תור</a></li>
+    </ul>
+  </div>
+
+  <main class="booking-main">
+    <div class="booking-header">
+      <span class="section-tag">זימון תור</span>
+      <h1>קביעת תור<br/><em>מקצועי ומהיר</em></h1>
+      <p>בחרי שירות, תאריך ושעה שמתאימים לך</p>
+    </div>
+
+    <!-- STEPS INDICATOR -->
+    <div class="steps-bar">
+      <div class="step active" data-step="1"><span>1</span><p>שירות</p></div>
+      <div class="step-line"></div>
+      <div class="step" data-step="2"><span>2</span><p>תאריך</p></div>
+      <div class="step-line"></div>
+      <div class="step" data-step="3"><span>3</span><p>שעה</p></div>
+      <div class="step-line"></div>
+      <div class="step" data-step="4"><span>4</span><p>פרטים</p></div>
+    </div>
+
+    <div class="booking-card">
+
+      <!-- STEP 1: SERVICE -->
+      <div class="booking-step" id="step1">
+        <h2>איזה שירות תרצי?</h2>
+        <div class="services-pick" id="servicesList"></div>
+        <div class="step-nav">
+          <button class="btn-next" id="toStep2" disabled>המשך ←</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: DATE -->
+      <div class="booking-step hidden" id="step2">
+        <h2>בחרי תאריך</h2>
+        <div class="calendar-wrap">
+          <div class="cal-header">
+            <button id="prevMonth">&#8250;</button>
+            <span id="calTitle"></span>
+            <button id="nextMonth">&#8249;</button>
+          </div>
+          <div class="cal-days-header">
+            <span>א'</span><span>ב'</span><span>ג'</span><span>ד'</span><span>ה'</span><span>ו'</span><span>ש'</span>
+          </div>
+          <div class="cal-grid" id="calGrid"></div>
+        </div>
+        <div class="step-nav">
+          <button class="btn-back" id="toStep1Back">→ חזרה</button>
+          <button class="btn-next" id="toStep3" disabled>המשך ←</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: TIME -->
+      <div class="booking-step hidden" id="step3">
+        <h2>בחרי שעה</h2>
+        <p class="step-sub" id="selectedDateLabel"></p>
+        <div class="slots-grid" id="slotsGrid"></div>
+        <p class="no-slots hidden" id="noSlots">אין שעות פנויות ביום זה 😔<br/>אנא בחרי תאריך אחר</p>
+        <div class="step-nav">
+          <button class="btn-back" id="toStep2Back">→ חזרה</button>
+          <button class="btn-next" id="toStep4" disabled>המשך ←</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: DETAILS -->
+      <div class="booking-step hidden" id="step4">
+        <h2>פרטים אישיים</h2>
+        <div class="booking-summary-mini" id="summaryMini"></div>
+        <form id="bookingForm" novalidate>
+          <div class="form-group">
+            <label>שם מלא *</label>
+            <input type="text" id="clientName" placeholder="שם פרטי ושם משפחה" required/>
+          </div>
+          <div class="form-group">
+            <label>מספר טלפון *</label>
+            <input type="tel" id="clientPhone" placeholder="05X-XXXXXXX" required/>
+          </div>
+          <div class="form-group">
+            <label>הערות (אופציונלי)</label>
+            <textarea id="clientNotes" placeholder="עיצוב מיוחד, בקשות מיוחדות..." rows="3"></textarea>
+          </div>
+          <div class="step-nav">
+            <button type="button" class="btn-back" id="toStep3Back">→ חזרה</button>
+            <button type="submit" class="btn-confirm">אישור תור 💅</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- STEP 5: CONFIRMATION -->
+      <div class="booking-step hidden" id="step5">
+        <div class="confirm-wrap">
+          <div class="confirm-icon">✅</div>
+          <h2>התור נקבע בהצלחה!</h2>
+          <div class="confirm-details" id="confirmDetails"></div>
+          <p class="confirm-note">תקבלי תזכורת יום לפני התור דרך הדפדפן</p>
+          <div class="confirm-btns">
+            <a id="confirmWA" href="#" target="_blank" class="btn-wa">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.855L0 24l6.335-1.508A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.371l-.36-.214-3.727.977.994-3.634-.235-.374A9.818 9.818 0 1112 21.818z"/></svg>
+              שלחי אישור בוואטסאפ
+            </a>
+            <a href="booking.html" class="btn-outline" style="color:var(--dark);border-color:var(--pink)">קבעי תור נוסף</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <img src="Screenshot 2026-03-27 122808.png" alt="logo" class="footer-logo"/>
+    <p>© 2025 Lian Rebekah Nails · כל הזכויות שמורות</p>
+  </footer>
+
+  <script src="booking.js"></script>
+  <script src="booking-ui.js"></script>
+</body>
+</html>
