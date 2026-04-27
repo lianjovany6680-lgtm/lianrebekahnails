@@ -3,8 +3,20 @@ const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxAAZ1qzvkid1XkZJBH2
 
 function saveToSheets(appt) {
   try {
+    // שולחים רק את השדות הנחוצים כדי לקצר את ה-URL
+    const slim = {
+      id:          appt.id,
+      serviceName: appt.serviceName,
+      duration:    appt.duration,
+      date:        appt.date,
+      time:        appt.time,
+      clientName:  appt.clientName,
+      clientPhone: appt.clientPhone,
+      notes:       appt.notes || '',
+      status:      appt.status,
+    };
     const callbackName = 'saveCb_' + Date.now();
-    const url = WEBAPP_URL + '?action=save&data=' + encodeURIComponent(JSON.stringify(appt)) + '&callback=' + callbackName;
+    const url = WEBAPP_URL + '?action=save&callback=' + callbackName + '&data=' + encodeURIComponent(JSON.stringify(slim));
     window[callbackName] = (res) => {
       delete window[callbackName];
       document.getElementById('saveScript')?.remove();
