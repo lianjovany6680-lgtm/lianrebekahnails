@@ -25,6 +25,39 @@ function showConfirmDialog(msg, onConfirm) {
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('loginBtn').addEventListener('click', tryLogin);
   document.getElementById('passInput').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    document.getElementById('adminWrap').classList.add('hidden');
+    document.getElementById('loginOverlay').classList.remove('hidden');
+    document.getElementById('passInput').value = '';
+  });
+  document.querySelectorAll('.admin-nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+      if (btn.dataset.panel === 'dashboard') renderDashboard();
+      if (btn.dataset.panel === 'calendar') renderAdminCalendar();
+      if (btn.dataset.panel === 'appointments') renderAllAppointments();
+      if (btn.dataset.panel === 'settings') renderSettings();
+      if (btn.dataset.panel === 'services') renderServicesEditor();
+    });
+  });
+  document.getElementById('filterStatus').addEventListener('change', renderAllAppointments);
+  document.getElementById('filterDate').addEventListener('change', renderAllAppointments);
+  document.getElementById('clearFilter').addEventListener('click', () => {
+    document.getElementById('filterStatus').value = 'all';
+    document.getElementById('filterDate').value = '';
+    renderAllAppointments();
+  });
+  document.getElementById('saveSettings').addEventListener('click', saveSettingsHandler);
+  document.getElementById('addServiceBtn').addEventListener('click', () => {
+    const services = getServices();
+    services.push({ id: generateId(), name: 'שירות חדש', icon: '💅', duration: 60, price: '' });
+    saveServices(services);
+    renderServicesEditor();
+  });
+  document.getElementById('saveServices').addEventListener('click', saveServicesHandler);
 });
 
 function tryLogin() {
@@ -40,26 +73,6 @@ function tryLogin() {
   }
 }
 
-document.getElementById('logoutBtn').addEventListener('click', () => {
-  document.getElementById('adminWrap').classList.add('hidden');
-  document.getElementById('loginOverlay').classList.remove('hidden');
-  document.getElementById('passInput').value = '';
-});
-
-// ── PANEL NAVIGATION ──
-document.querySelectorAll('.admin-nav-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
-    if (btn.dataset.panel === 'dashboard') renderDashboard();
-    if (btn.dataset.panel === 'calendar') renderAdminCalendar();
-    if (btn.dataset.panel === 'appointments') renderAllAppointments();
-    if (btn.dataset.panel === 'settings') renderSettings();
-    if (btn.dataset.panel === 'services') renderServicesEditor();
-  });
-});
 
 function initAdmin() {
   requestNotificationPermission();
@@ -236,13 +249,6 @@ function renderAllAppointments() {
     : emptyMsg('אין תורים');
 }
 
-document.getElementById('filterStatus').addEventListener('change', renderAllAppointments);
-document.getElementById('filterDate').addEventListener('change', renderAllAppointments);
-document.getElementById('clearFilter').addEventListener('click', () => {
-  document.getElementById('filterStatus').value = 'all';
-  document.getElementById('filterDate').value = '';
-  renderAllAppointments();
-});
 
 // ── APPOINTMENT ACTIONS ──
 function updateStatus(id, status) {
@@ -339,7 +345,7 @@ function removeBlockDate(dateStr) {
   renderBlockedDates();
 }
 
-document.getElementById('saveSettings').addEventListener('click', () => {
+function saveSettingsHandler() {
   const settings = getSettings();
   settings.slotInterval = +document.getElementById('slotInterval').value;
   settings.waPhone = document.getElementById('waPhoneInput').value.trim();
@@ -359,9 +365,9 @@ document.getElementById('saveSettings').addEventListener('click', () => {
   saveSettings(settings);
   showToast('✅ הגדרות נשמרו בהצלחה!');
   document.getElementById('newPassInput').value = '';
-});
+}
 
-// ── SERVICES EDITOR ──
+function saveServicesHandler() {
 function renderServicesEditor() {
   const services = getServices();
   document.getElementById('servicesEditor').innerHTML = services.map((s, i) => `
@@ -388,14 +394,6 @@ function removeService(idx) {
   renderServicesEditor();
 }
 
-document.getElementById('addServiceBtn').addEventListener('click', () => {
-  const services = getServices();
-  services.push({ id: generateId(), name: 'שירות חדש', icon: '💅', duration: 60, price: '' });
-  saveServices(services);
-  renderServicesEditor();
-});
-
-document.getElementById('saveServices').addEventListener('click', () => {
   const rows = document.querySelectorAll('.svc-edit-row');
   const services = getServices();
   rows.forEach((row, i) => {
@@ -404,6 +402,6 @@ document.getElementById('saveServices').addEventListener('click', () => {
     services[i].duration = +row.querySelector('.svc-duration').value;
     services[i].price = row.querySelector('.svc-price').value;
   });
-  saveServices(services);
-  showToast('✅ שירותים נשמרו בהצלחה!');
-});
+}
+
+// ── SERVICES EDITOR ──
