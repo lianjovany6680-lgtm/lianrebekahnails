@@ -52,6 +52,7 @@
         <button class="admin-nav-btn" data-panel="appointments">📋 כל התורים</button>
         <button class="admin-nav-btn" data-panel="settings">⚙️ הגדרות</button>
         <button class="admin-nav-btn" data-panel="services">💅 שירותים</button>
+        <button class="admin-nav-btn" data-panel="clients">👥 לקוחות</button>
       </nav>
       <button class="admin-logout" id="logoutBtn">יציאה</button>
       <a href="index.html" class="admin-home-btn">🏠 דף הבית</a>
@@ -175,6 +176,16 @@
         <p class="save-msg hidden" id="saveMsg">✅ נשמר בהצלחה!</p>
       </div>
 
+      <!-- CLIENTS -->
+      <div class="admin-panel" id="panel-clients">
+        <h1 class="admin-title">לקוחות</h1>
+        <div class="appt-filters">
+          <input type="text" id="clientSearch" placeholder="חיפוש לפי שם או טלפון..." style="flex:1;padding:10px 14px;border:2px solid #f0e0e8;border-radius:12px;font-size:14px;font-family:Heebo,sans-serif;outline:none;"/>
+          <button class="btn-clear-filter" id="clearClientSearch">נקה</button>
+        </div>
+        <div id="clientsList" class="clients-list"></div>
+      </div>
+
       <!-- SERVICES -->
       <div class="admin-panel" id="panel-services">
         <h1 class="admin-title">ניהול שירותים</h1>
@@ -188,6 +199,6 @@
   </div>
 
   <script src="booking.js" defer></script>
-  <script src="admin-ui.js?v=13" defer></script>
+  <script src="admin-ui.js?v=14" defer></script>
 </body>
 </html>

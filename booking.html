@@ -119,7 +119,12 @@
         <h2>בחרי שעה</h2>
         <p class="step-sub" id="selectedDateLabel"></p>
         <div class="slots-grid" id="slotsGrid"></div>
-        <p class="no-slots hidden" id="noSlots">אין שעות פנויות ביום זה 😔<br/>אנא בחרי תאריך אחר</p>
+        <p class="no-slots hidden" id="noSlots">אין שעות פנויות ביום זה 😔<br/>אנא בחרי תאריך אחר
+          <div class="waitlist-offer hidden" id="waitlistOffer">
+            <p>או הירשמי לרשימת המתנה ליום זה ונודיע לך אם יתפנה מקום</p>
+            <button class="btn-waitlist" onclick="joinWaitlist()">+ הירשמי לרשימת המתנה</button>
+          </div>
+        </p>
         <div class="step-nav">
           <button class="btn-back" id="toStep2Back">→ חזרה</button>
           <button class="btn-next" id="toStep4" disabled>המשך ←</button>
@@ -175,7 +180,7 @@
     <p>© 2025 Lian Rebekah Nails · כל הזכויות שמורות</p>
   </footer>
 
-  <script src="booking.js?v=16"></script>
-  <script src="booking-ui.js?v=16"></script>
+  <script src="booking.js?v=17"></script>
+  <script src="booking-ui.js?v=17"></script>
 </body>
 </html>

@@ -254,10 +254,14 @@ function renderSlots() {
   if (slots.length === 0) {
     grid.innerHTML = '';
     noSlots.classList.remove('hidden');
+    const waitlistOffer = document.getElementById('waitlistOffer');
+    if (waitlistOffer) waitlistOffer.classList.remove('hidden');
     document.getElementById('toStep4').disabled = true;
     return;
   }
   noSlots.classList.add('hidden');
+  const waitlistOffer = document.getElementById('waitlistOffer');
+  if (waitlistOffer) waitlistOffer.classList.add('hidden');
   grid.innerHTML = slots.map(t => `
     <button class="slot-btn" onclick="selectSlot('${t}', this)">${t}</button>
   `).join('');
@@ -268,6 +272,31 @@ function selectSlot(time, el) {
   document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
   el.classList.add('selected');
   document.getElementById('toStep4').disabled = false;
+}
+
+// ── WAITLIST ──
+function joinWaitlist() {
+  if (!currentClient || !currentClient.phone) {
+    // בקש פרטים אם לא מחוברת
+    const name  = prompt('שמך:');
+    const phone = prompt('טלפון:');
+    if (!name || !phone) return;
+    currentClient = { name, phone };
+  }
+  const cb = 'wl' + Date.now();
+  const url = WEBAPP_URL + '?action=addWaitlist&callback=' + cb
+    + '&date='    + selected.date
+    + '&name='    + encodeURIComponent(currentClient.name)
+    + '&phone='   + encodeURIComponent(currentClient.phone)
+    + '&service=' + encodeURIComponent(selected.service?.name || '');
+  window[cb] = (res) => {
+    delete window[cb]; document.getElementById(cb)?.remove();
+    document.getElementById('waitlistOffer').innerHTML =
+      '<p style="color:#25D366;font-weight:600">✅ נרשמת בהצלחה! נודיע לך אם יתפנה מקום 💅</p>';
+  };
+  const s = document.createElement('script');
+  s.id = cb; s.src = url;
+  document.body.appendChild(s);
 }
 
 // ── STEP 4: SUMMARY + FORM ──

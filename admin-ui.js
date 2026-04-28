@@ -88,6 +88,11 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('saveSettings').addEventListener('click', saveSettingsHandler);
   document.getElementById('addServiceBtn').addEventListener('click', addService);
   document.getElementById('saveServices').addEventListener('click', saveServicesHandler);
+  document.getElementById('clientSearch').addEventListener('input', renderClientsList);
+  document.getElementById('clearClientSearch').addEventListener('click', () => {
+    document.getElementById('clientSearch').value = '';
+    renderClientsList();
+  });
 });
 
 // ── LOGIN ──
@@ -139,6 +144,7 @@ function switchPanel(panel) {
   if (panel === 'calendar') renderAdminCalendar();
   if (panel === 'appointments') renderAllAppointments();
   if (panel === 'settings') renderSettings();
+  if (panel === 'clients') renderClientsList();
   if (panel === 'services') renderServicesEditor();
 }
 
@@ -473,6 +479,55 @@ function saveSettingsHandler() {
   saveSettings(settings);
   showToast('✅ הגדרות נשמרו בהצלחה!');
   document.getElementById('newPassInput').value = '';
+}
+
+// ── CLIENTS LIST ──
+function renderClientsList() {
+  const search = document.getElementById('clientSearch')?.value.toLowerCase() || '';
+  const list = document.getElementById('clientsList');
+  if (!list) return;
+  list.innerHTML = '<p class="empty-msg">טוען לקוחות...</p>';
+  loadClientsFromSheets().then(clients => {
+    if (!clients || clients.length === 0) {
+      list.innerHTML = emptyMsg('אין לקוחות רשומים עדיין');
+      return;
+    }
+    const filtered = search
+      ? clients.filter(c => c.name.toLowerCase().includes(search) || c.phone.includes(search))
+      : clients;
+    if (filtered.length === 0) { list.innerHTML = emptyMsg('לא נמצאו תוצאות'); return; }
+    const appts = getAppointments();
+    list.innerHTML = filtered.map(c => {
+      const clientAppts = appts.filter(a => a.clientPhone === c.phone && a.status !== 'cancelled');
+      const lastAppt = clientAppts.sort((a,b) => b.date.localeCompare(a.date))[0];
+      return `
+        <div class="client-card">
+          <div class="client-avatar">${c.name.charAt(0)}</div>
+          <div class="client-info">
+            <strong>${sanitize(c.name)}</strong>
+            <span><a href="tel:${sanitize(c.phone)}">${sanitize(c.phone)}</a></span>
+            <span>תורים: ${clientAppts.length} | אחרון: ${lastAppt ? lastAppt.date : 'אין'}</span>
+          </div>
+          <a href="https://wa.me/${c.phone.replace(/\D/g,'')}" target="_blank" class="act-btn wa">💬</a>
+        </div>`;
+    }).join('');
+  });
+}
+
+function loadClientsFromSheets() {
+  return new Promise((resolve) => {
+    const cb = 'lc' + Date.now();
+    const url = WEBAPP_URL + '?action=loadClients&callback=' + cb;
+    window[cb] = (data) => {
+      delete window[cb]; document.getElementById(cb)?.remove();
+      resolve(Array.isArray(data) ? data : []);
+    };
+    const s = document.createElement('script');
+    s.id = cb; s.src = url;
+    s.onerror = () => resolve([]);
+    document.body.appendChild(s);
+    setTimeout(() => { delete window[cb]; resolve([]); }, 8000);
+  });
 }
 
 // ── SERVICES EDITOR ──
