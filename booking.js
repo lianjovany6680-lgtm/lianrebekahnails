@@ -71,6 +71,17 @@ async function loadFromSheets() {
   });
 }
 
+function saveClientToSheets(name, phone) {
+  const cb = 'cl' + Date.now();
+  const url = WEBAPP_URL + '?action=saveClient&callback=' + cb
+    + '&name=' + encodeURIComponent(name)
+    + '&phone=' + encodeURIComponent(phone);
+  window[cb] = () => { delete window[cb]; document.getElementById(cb)?.remove(); };
+  const s = document.createElement('script');
+  s.id = cb; s.src = url;
+  document.body.appendChild(s);
+}
+
 // ── SANITIZE ──
 function sanitize(str) {
   const d = document.createElement('div');

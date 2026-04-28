@@ -59,7 +59,31 @@
       <div class="step" data-step="4"><span>4</span><p>פרטים</p></div>
     </div>
 
+    <!-- CLIENT GREETING -->
+    <div class="client-greeting hidden" id="clientGreeting">
+      <span class="greeting-avatar" id="greetingAvatar"></span>
+      <div>
+        <p class="greeting-name" id="greetingName"></p>
+        <p class="greeting-sub">שמחה לראותך שוב! פרטייך מולאו אוטומטית בשבילך ❤️</p>
+      </div>
+      <button class="greeting-logout" onclick="logoutClient()">התנתק</button>
+    </div>
+
     <div class="booking-card">
+
+      <!-- STEP LOGIN -->
+      <div class="booking-step" id="stepLogin">
+        <h2>שלום! בואי נתחיל במספר הטלפון שלך</h2>
+        <p style="color:#aaa;font-size:14px;margin-bottom:24px">אם קבעת אצלנו בעבר, פרטייך ימולאו אוטומטית</p>
+        <div class="form-group">
+          <label>מספר טלפון *</label>
+          <input type="tel" id="loginPhone" placeholder="05X-XXXXXXX" inputmode="numeric"/>
+        </div>
+        <div class="step-nav">
+          <button class="btn-next" id="loginBtn" style="width:100%">המשך ←</button>
+        </div>
+        <p class="login-skip"><a href="#" onclick="skipLogin()"> או קבעי תור בלי התחברות</a></p>
+      </div>
 
       <!-- STEP 1: SERVICE -->
       <div class="booking-step" id="step1">
@@ -151,7 +175,7 @@
     <p>© 2025 Lian Rebekah Nails · כל הזכויות שמורות</p>
   </footer>
 
-  <script src="booking.js?v=13"></script>
-  <script src="booking-ui.js?v=13"></script>
+  <script src="booking.js?v=14"></script>
+  <script src="booking-ui.js?v=14"></script>
 </body>
 </html>

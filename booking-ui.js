@@ -1,6 +1,7 @@
 // ── STATE ──
 let selected = { service: null, date: null, time: null };
 let calYear, calMonth;
+let currentClient = null; // לקוחה מחוברת
 
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', () => {
@@ -9,7 +10,112 @@ document.addEventListener('DOMContentLoaded', () => {
   initCalendar();
   bindSteps();
   bindMobileMenu();
+  initClientLogin();
 });
+
+// ── CLIENT LOGIN ──
+function initClientLogin() {
+  // בדוק אם יש לקוחה שמורה ב-localStorage
+  const saved = localStorage.getItem('clientSession');
+  if (saved) {
+    try {
+      currentClient = JSON.parse(saved);
+      showClientGreeting(currentClient);
+      showStep(1);
+      prefillClientDetails();
+      return;
+    } catch(e) {}
+  }
+  // הצג שלב כניסה
+  document.querySelectorAll('.booking-step').forEach(s => s.classList.add('hidden'));
+  document.getElementById('stepLogin').classList.remove('hidden');
+  document.getElementById('loginBtn').addEventListener('click', handleClientLogin);
+  document.getElementById('loginPhone').addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleClientLogin();
+  });
+}
+
+function handleClientLogin() {
+  const phone = document.getElementById('loginPhone').value.trim();
+  if (!phone || !/^[0-9+\-\s]{9,15}$/.test(phone)) {
+    document.getElementById('loginPhone').style.borderColor = '#e05';
+    return;
+  }
+  document.getElementById('loginPhone').style.borderColor = '';
+  // חפש לקוחה קיימת
+  lookupClient(phone);
+}
+
+function lookupClient(phone) {
+  const btn = document.getElementById('loginBtn');
+  btn.textContent = 'מחפש...';
+  btn.disabled = true;
+  const cb = 'lc' + Date.now();
+  const url = WEBAPP_URL + '?action=lookupClient&callback=' + cb + '&phone=' + encodeURIComponent(phone);
+  window[cb] = (data) => {
+    delete window[cb]; document.getElementById(cb)?.remove();
+    btn.textContent = 'המשך ←';
+    btn.disabled = false;
+    if (data && data.name) {
+      // לקוחה קיימת
+      currentClient = { name: data.name, phone };
+    } else {
+      // לקוחה חדשה
+      currentClient = { name: null, phone };
+    }
+    localStorage.setItem('clientSession', JSON.stringify(currentClient));
+    showClientGreeting(currentClient);
+    showStep(1);
+    prefillClientDetails();
+  };
+  const s = document.createElement('script');
+  s.id = cb; s.src = url;
+  s.onerror = () => {
+    delete window[cb];
+    btn.textContent = 'המשך ←';
+    btn.disabled = false;
+    currentClient = { name: null, phone };
+    localStorage.setItem('clientSession', JSON.stringify(currentClient));
+    showStep(1);
+    prefillClientDetails();
+  };
+  document.body.appendChild(s);
+}
+
+function showClientGreeting(client) {
+  const greeting = document.getElementById('clientGreeting');
+  const nameEl = document.getElementById('greetingName');
+  const avatarEl = document.getElementById('greetingAvatar');
+  if (client && client.name) {
+    nameEl.textContent = 'שלום, ' + client.name + '! 💅';
+    avatarEl.textContent = client.name.charAt(0);
+    greeting.classList.remove('hidden');
+  } else {
+    greeting.classList.add('hidden');
+  }
+}
+
+function prefillClientDetails() {
+  if (!currentClient) return;
+  const nameInput = document.getElementById('clientName');
+  const phoneInput = document.getElementById('clientPhone');
+  if (currentClient.name) nameInput.value = currentClient.name;
+  if (currentClient.phone) phoneInput.value = currentClient.phone;
+}
+
+function skipLogin() {
+  currentClient = null;
+  showStep(1);
+}
+
+function logoutClient() {
+  currentClient = null;
+  localStorage.removeItem('clientSession');
+  document.getElementById('clientGreeting').classList.add('hidden');
+  document.querySelectorAll('.booking-step').forEach(s => s.classList.add('hidden'));
+  document.getElementById('stepLogin').classList.remove('hidden');
+  document.getElementById('loginPhone').value = '';
+}
 
 // ── MOBILE MENU ──
 function bindMobileMenu() {
@@ -198,7 +304,12 @@ function submitBooking(e) {
   const appointments = getAppointments();
   appointments.push(appt);
   saveAppointments(appointments);
-  saveToSheets(appt); // שמירה ב-Google Sheets
+  saveToSheets(appt);
+  saveClientToSheets(name, phone); // שמור לקוחה
+  // עדכן סשנת לקוחה ב-localStorage
+  currentClient = { name, phone };
+  localStorage.setItem('clientSession', JSON.stringify(currentClient));
+  showClientGreeting(currentClient);
   scheduleAppointmentReminders(appt);
   showConfirmation(appt);
 }

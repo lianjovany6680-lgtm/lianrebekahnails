@@ -1,3 +1,39 @@
+/* ── CLIENT GREETING ── */
+.client-greeting {
+  max-width: 720px;
+  margin: 0 auto 16px;
+  background: linear-gradient(135deg, #fdf0f5, #fff);
+  border: 1.5px solid var(--pink);
+  border-radius: 20px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.greeting-avatar {
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, var(--pink), var(--dark-pink));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 700; font-size: 18px;
+  flex-shrink: 0;
+}
+.greeting-name { font-weight: 700; font-size: 16px; color: var(--dark); margin-bottom: 2px; }
+.greeting-sub { font-size: 12px; color: #aaa; }
+.greeting-logout {
+  margin-right: auto;
+  background: none; border: 1px solid #e0e0e0;
+  color: #aaa; padding: 6px 12px; border-radius: 20px;
+  font-size: 12px; cursor: pointer; font-family: 'Heebo', sans-serif;
+  transition: all 0.2s; flex-shrink: 0;
+}
+.greeting-logout:hover { border-color: #e05; color: #e05; }
+
+/* ── LOGIN SKIP ── */
+.login-skip { text-align: center; margin-top: 16px; font-size: 13px; color: #aaa; }
+.login-skip a { color: var(--dark-pink); text-decoration: none; }
+.login-skip a:hover { text-decoration: underline; }
+
 /* ── BOOKING PAGE ── */
 .booking-page { cursor: default; }
 .booking-main {
