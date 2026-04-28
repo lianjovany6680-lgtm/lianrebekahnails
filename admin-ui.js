@@ -36,14 +36,10 @@ function doLogout() {
 
 function initAdmin() {
   requestNotificationPermission();
-  console.log('initAdmin called');
-  _renderDashboard();
-  loadFromSheets().then(appts => {
-    console.log('sheets loaded:', appts ? appts.length : 'null');
-    _renderDashboard();
-  });
   document.getElementById('sidebarToggle')?.addEventListener('click', () =>
     document.querySelector('.admin-sidebar').classList.toggle('open'));
+  // טען תמיד מ-Sheets בכניסה
+  loadFromSheets().then(() => _renderDashboard());
 }
 
 // ── PANEL NAVIGATION ──
@@ -153,7 +149,6 @@ function refreshCurrentPanel() {
 
 function _renderDashboard() {
   const all = getAppointments();
-  console.log('dashboard appointments:', all.length, all);
   const today = todayStr();
   const tomorrow = tomorrowStr();
   const week = weekEnd();
