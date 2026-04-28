@@ -142,6 +142,7 @@ function renderDashboard() {
 
 function _renderDashboard() {
   const all = getAppointments();
+  console.log('dashboard appointments:', all.length, all);
   const today = todayStr();
   const tomorrow = tomorrowStr();
   const week = weekEnd();
