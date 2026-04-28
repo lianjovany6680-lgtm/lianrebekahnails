@@ -141,9 +141,7 @@ function apptCard(appt, showDate = false) {
 }
 
 function renderDashboard() {
-  loadFromSheets().then(() => {
-    _renderDashboard();
-  });
+  loadFromSheets().then(() => _renderDashboard());
 }
 
 function _renderDashboard() {
@@ -255,6 +253,7 @@ function updateStatus(id, status) {
   if (!appt) return;
   appt.status = status;
   saveAppointments(appts);
+  updateStatusInSheets(id, status);
   refreshCurrentPanel();
 }
 
@@ -270,6 +269,20 @@ function sendReminderWA(id) {
   if (!appt) return;
   const msg = `היי ${appt.clientName}! 💅\nתזכורת לתור שלך:\n✨ ${appt.serviceName}\n📅 ${formatDate(appt.date)}\n🕐 ${appt.time}\nמחכה לך! 🌸`;
   window.open(`https://wa.me/${appt.clientPhone.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+function updateStatusInSheets(id, status) {
+  const cb = 'uc' + Date.now();
+  const url = WEBAPP_URL
+    + '?action=updateStatus'
+    + '&callback=' + cb
+    + '&id=' + encodeURIComponent(id)
+    + '&status=' + encodeURIComponent(status);
+  window[cb] = () => { delete window[cb]; document.getElementById(cb)?.remove(); };
+  const s = document.createElement('script');
+  s.id = cb;
+  s.src = url;
+  document.body.appendChild(s);
 }
 
 function syncSheets() {
