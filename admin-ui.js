@@ -1,8 +1,83 @@
+// ── WEBAUTHN BIOMETRIC ──
+const BIOMETRIC_KEY = 'biometricCredentialId';
+
+async function initBiometric() {
+  if (!window.PublicKeyCredential) return;
+  const credId = localStorage.getItem(BIOMETRIC_KEY);
+  if (credId) {
+    document.getElementById('biometricBtn').style.display = 'flex';
+    document.getElementById('biometricBtn').addEventListener('click', loginWithBiometric);
+    // נסה אוטומטית
+    setTimeout(() => loginWithBiometric(), 300);
+  }
+}
+
+async function loginWithBiometric() {
+  try {
+    const credId = localStorage.getItem(BIOMETRIC_KEY);
+    if (!credId) return;
+    const challenge = new Uint8Array(32);
+    crypto.getRandomValues(challenge);
+    const assertion = await navigator.credentials.get({
+      publicKey: {
+        challenge,
+        allowCredentials: [{ id: base64ToBuffer(credId), type: 'public-key' }],
+        userVerification: 'required',
+        timeout: 60000,
+      }
+    });
+    if (assertion) {
+      document.getElementById('loginOverlay').style.display = 'none';
+      document.getElementById('adminWrap').style.display = 'flex';
+      initAdmin();
+    }
+  } catch(e) {
+    console.log('Biometric failed:', e.message);
+  }
+}
+
+async function setupBiometric() {
+  try {
+    const challenge = new Uint8Array(32);
+    crypto.getRandomValues(challenge);
+    const userId = new Uint8Array(16);
+    crypto.getRandomValues(userId);
+    const credential = await navigator.credentials.create({
+      publicKey: {
+        challenge,
+        rp: { name: 'Lian Rebekah Nails', id: location.hostname },
+        user: { id: userId, name: 'admin', displayName: 'Admin' },
+        pubKeyCredParams: [{ alg: -7, type: 'public-key' }],
+        authenticatorSelection: { userVerification: 'required', authenticatorAttachment: 'platform' },
+        timeout: 60000,
+      }
+    });
+    if (credential) {
+      localStorage.setItem(BIOMETRIC_KEY, bufferToBase64(credential.rawId));
+      document.getElementById('biometricBtn').style.display = 'flex';
+      document.getElementById('setupBiometricBtn').style.display = 'none';
+      showToast('✅ Face ID נשמר בהצלחה!');
+    }
+  } catch(e) {
+    showToast('❌ לא ניתן להגדיר Face ID בדפדפן זה', '#e05');
+  }
+}
+
+function bufferToBase64(buffer) {
+  return btoa(String.fromCharCode(...new Uint8Array(buffer)));
+}
+function base64ToBuffer(base64) {
+  const bin = atob(base64);
+  return Uint8Array.from(bin, c => c.charCodeAt(0)).buffer;
+}
+
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', () => {
+  initBiometric();
   document.getElementById('loginBtn').addEventListener('click', tryLogin);
   document.getElementById('passInput').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
   document.getElementById('logoutBtn').addEventListener('click', doLogout);
+  document.getElementById('setupBiometricBtn').addEventListener('click', setupBiometric);
   document.querySelectorAll('.admin-nav-btn').forEach(btn => btn.addEventListener('click', () => switchPanel(btn.dataset.panel)));
   document.getElementById('filterStatus').addEventListener('change', renderAllAppointments);
   document.getElementById('filterDate').addEventListener('change', renderAllAppointments);
@@ -20,6 +95,10 @@ function tryLogin() {
   if (pass === correctPass) {
     document.getElementById('loginOverlay').style.display = 'none';
     document.getElementById('adminWrap').style.display = 'flex';
+    // הצג כפתור הגדרת Face ID אם לא הוגדר עדיין
+    if (window.PublicKeyCredential && !localStorage.getItem(BIOMETRIC_KEY)) {
+      document.getElementById('setupBiometricBtn').style.display = 'block';
+    }
     initAdmin();
   } else {
     document.getElementById('loginErr').classList.remove('hidden');

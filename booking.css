@@ -272,6 +272,41 @@
 .confirm-note { font-size: 13px; color: #aaa; margin-bottom: 28px; }
 .confirm-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
 
+.btn-biometric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 18px;
+  background: linear-gradient(135deg, #1a0810, #4a1528);
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: 'Heebo', sans-serif;
+  cursor: pointer;
+  margin-bottom: 16px;
+  transition: opacity 0.2s;
+}
+.btn-biometric:hover { opacity: 0.85; }
+.btn-biometric svg { stroke: var(--pink); }
+.btn-setup-biometric {
+  width: 100%;
+  background: none;
+  border: 1.5px dashed var(--pink);
+  color: var(--dark-pink);
+  padding: 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-family: 'Heebo', sans-serif;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.2s;
+}
+.btn-setup-biometric:hover { background: #fdf0f5; }
+
 /* ── ADMIN LOGIN ── */
 .login-overlay {
   position: fixed; inset: 0;

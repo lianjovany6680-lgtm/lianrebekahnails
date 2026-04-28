@@ -19,8 +19,19 @@
     <div class="login-box">
       <img src="Screenshot 2026-03-27 122808.png" alt="logo" style="height:70px;margin-bottom:20px;"/>
       <h2>כניסה לניהול</h2>
-      <input type="password" id="passInput" placeholder="סיסמה" />
-      <button id="loginBtn" class="btn-confirm">כניסה</button>
+      <button id="biometricBtn" class="btn-biometric" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="32" height="32">
+          <path d="M7 3H5a2 2 0 00-2 2v2M17 3h2a2 2 0 012 2v2M7 21H5a2 2 0 01-2-2v-2M17 21h2a2 2 0 002-2v-2"/>
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M12 7v1M12 16v1M7 12h1M16 12h1"/>
+        </svg>
+        כניסה עם Face ID
+      </button>
+      <div id="passSection">
+        <input type="password" id="passInput" placeholder="סיסמה" />
+        <button id="loginBtn" class="btn-confirm">כניסה</button>
+        <button id="setupBiometricBtn" class="btn-setup-biometric" style="display:none">🔒 שמור Face ID לכניסות מהירה</button>
+      </div>
       <p class="login-err hidden" id="loginErr">סיסמה שגויה</p>
     </div>
   </div>
@@ -177,6 +188,6 @@
   </div>
 
   <script src="booking.js" defer></script>
-  <script src="admin-ui.js?v=11" defer></script>
+  <script src="admin-ui.js?v=12" defer></script>
 </body>
 </html>
