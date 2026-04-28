@@ -499,6 +499,20 @@
 }
 .btn-sync:hover { background: var(--dark-pink); color: #fff; }
 
+.admin-home-btn {
+  display: block;
+  text-align: center;
+  color: rgba(255,255,255,0.4);
+  font-size: 13px;
+  text-decoration: none;
+  padding: 8px;
+  margin-top: 6px;
+  border-radius: 10px;
+  transition: all 0.2s;
+  font-family: 'Heebo', sans-serif;
+}
+.admin-home-btn:hover { color: #fff; background: rgba(255,255,255,0.08); }
+
 /* ── SAVE MSG ── */
 .save-msg { color: #25D366; font-weight: 600; font-size: 14px; margin-top: 12px; }
 

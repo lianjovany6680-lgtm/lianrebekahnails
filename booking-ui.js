@@ -43,7 +43,11 @@ function showStep(n) {
     s.classList.toggle('active', sn === n);
     s.classList.toggle('done', sn < n);
   });
-  document.querySelector('.booking-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelector('.booking-card').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  setTimeout(() => {
+    const nav = document.querySelector('#step' + n + ' .step-nav');
+    if (nav) nav.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }, 100);
 }
 
 function bindSteps() {
