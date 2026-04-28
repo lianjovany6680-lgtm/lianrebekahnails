@@ -532,6 +532,43 @@ footer {
 footer p { font-size: 13px; margin-bottom: 6px; }
 .footer-sub { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #444; }
 
+/* ── FOOTER SOCIAL ── */
+.footer-social { margin-bottom: 16px; }
+.footer-ig {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--pink);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 8px 20px;
+  border: 1.5px solid rgba(232,164,184,0.3);
+  border-radius: 50px;
+  transition: all 0.3s;
+}
+.footer-ig svg { width: 18px; height: 18px; }
+.footer-ig:hover { color: #fff; border-color: var(--pink); background: rgba(232,164,184,0.15); }
+
+/* ── INSTAGRAM FLOAT ── */
+.ig-float {
+  position: fixed;
+  bottom: 100px;
+  left: 30px;
+  width: 52px; height: 52px;
+  background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(220,39,67,0.4);
+  z-index: 999;
+  transition: transform 0.2s;
+}
+.ig-float svg { width: 24px; height: 24px; stroke: #fff; }
+.ig-float:hover { transform: scale(1.12); }
+
 /* ── WHATSAPP FLOAT ── */
 .wa-float {
   position: fixed;
