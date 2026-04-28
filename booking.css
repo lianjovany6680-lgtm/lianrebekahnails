@@ -255,6 +255,18 @@
 }
 .btn-back:hover { border-color: var(--pink); color: var(--dark-pink); }
 
+.confirm-status-badge {
+  display: inline-block;
+  background: #fff3cd;
+  color: #856404;
+  border: 1.5px solid #ffc107;
+  padding: 8px 20px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
 /* ── CONFIRMATION ── */
 .confirm-wrap { text-align: center; padding: 20px 0; }
 .confirm-icon { font-size: 64px; margin-bottom: 16px; }
