@@ -123,8 +123,46 @@ function getSettings() {
 }
 function getAppointments() { return DB.get('appointments', []); }
 function saveAppointments(arr) { DB.set('appointments', arr); }
-function saveSettings(s) { DB.set('settings', s); }
-function saveServices(s) { DB.set('services', s); }
+function saveSettings(s) { DB.set('settings', s); saveSettingsToSheets(s); }
+function saveServices(s) { DB.set('services', s); saveServicesToSheets(s); }
+
+function saveSettingsToSheets(settings) {
+  const cb = 'ss' + Date.now();
+  const url = WEBAPP_URL + '?action=saveSettings&callback=' + cb
+    + '&data=' + encodeURIComponent(JSON.stringify(settings));
+  window[cb] = () => { delete window[cb]; document.getElementById(cb)?.remove(); };
+  const s = document.createElement('script');
+  s.id = cb; s.src = url;
+  document.body.appendChild(s);
+}
+
+function saveServicesToSheets(services) {
+  const cb = 'sv' + Date.now();
+  const url = WEBAPP_URL + '?action=saveServices&callback=' + cb
+    + '&data=' + encodeURIComponent(JSON.stringify(services));
+  window[cb] = () => { delete window[cb]; document.getElementById(cb)?.remove(); };
+  const s = document.createElement('script');
+  s.id = cb; s.src = url;
+  document.body.appendChild(s);
+}
+
+async function loadSettingsFromSheets() {
+  return new Promise((resolve) => {
+    const cb = 'ls' + Date.now();
+    const url = WEBAPP_URL + '?action=loadSettings&callback=' + cb;
+    window[cb] = (data) => {
+      delete window[cb]; document.getElementById(cb)?.remove();
+      if (data && data.settings) { DB.set('settings', data.settings); }
+      if (data && data.services) { DB.set('services', data.services); }
+      resolve(data);
+    };
+    const s = document.createElement('script');
+    s.id = cb; s.src = url;
+    s.onerror = () => resolve(null);
+    document.body.appendChild(s);
+    setTimeout(() => { delete window[cb]; resolve(null); }, 8000);
+  });
+}
 
 // ── HELPERS ──
 function generateId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }

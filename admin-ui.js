@@ -38,8 +38,8 @@ function initAdmin() {
   requestNotificationPermission();
   document.getElementById('sidebarToggle')?.addEventListener('click', () =>
     document.querySelector('.admin-sidebar').classList.toggle('open'));
-  // טען תמיד מ-Sheets בכניסה
-  loadFromSheets().then(() => _renderDashboard());
+  // טען הכל מ-Sheets
+  Promise.all([loadFromSheets(), loadSettingsFromSheets()]).then(() => _renderDashboard());
 }
 
 // ── PANEL NAVIGATION ──
