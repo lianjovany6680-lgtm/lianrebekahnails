@@ -43,7 +43,7 @@ function showStep(n) {
     s.classList.toggle('active', sn === n);
     s.classList.toggle('done', sn < n);
   });
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  document.querySelector('.booking-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function bindSteps() {
