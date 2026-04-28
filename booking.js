@@ -104,7 +104,7 @@ const DEFAULT_SETTINGS = {
   },
   slotInterval: 15, // דקות בין slots
   waPhone: '972523937950',
-  adminPass: '12341234',
+  adminPass: '1234',
   blockedDates: [], // ['2025-07-20', ...]
 };
 

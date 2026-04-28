@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function tryLogin() {
   const pass = document.getElementById('passInput').value.trim();
   const settings = getSettings();
-  const correctPass = settings.adminPass || '12341234';
+  const correctPass = settings.adminPass || '1234';
   if (pass === correctPass) {
     document.getElementById('loginOverlay').style.display = 'none';
     document.getElementById('adminWrap').style.display = 'flex';
