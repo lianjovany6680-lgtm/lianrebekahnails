@@ -532,6 +532,17 @@ footer {
 footer p { font-size: 13px; margin-bottom: 6px; }
 .footer-sub { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #444; }
 
+.btn-ig-hero {
+  background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-ig-hero svg { width: 18px; height: 18px; stroke: #fff; }
+.btn-ig-hero:hover { opacity: 0.9; color: #fff !important; }
+
 /* ── FOOTER SOCIAL ── */
 .footer-social { margin-bottom: 16px; }
 .footer-ig {
