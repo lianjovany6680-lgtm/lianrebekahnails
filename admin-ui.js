@@ -36,8 +36,12 @@ function doLogout() {
 
 function initAdmin() {
   requestNotificationPermission();
-  // טען תורים מ-Google Sheets
-  loadFromSheets().then(() => renderDashboard());
+  console.log('initAdmin called');
+  _renderDashboard();
+  loadFromSheets().then(appts => {
+    console.log('sheets loaded:', appts ? appts.length : 'null');
+    _renderDashboard();
+  });
   document.getElementById('sidebarToggle')?.addEventListener('click', () =>
     document.querySelector('.admin-sidebar').classList.toggle('open'));
 }

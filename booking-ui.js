@@ -78,6 +78,9 @@ function selectService(id) {
   document.querySelectorAll('.service-pick-card').forEach(c =>
     c.classList.toggle('selected', c.dataset.id === id));
   document.getElementById('toStep2').disabled = false;
+  setTimeout(() => {
+    document.getElementById('toStep2').scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }, 50);
 }
 
 // ── STEP 2: CALENDAR ──
