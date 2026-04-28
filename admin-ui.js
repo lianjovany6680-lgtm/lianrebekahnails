@@ -144,6 +144,13 @@ function renderDashboard() {
   loadFromSheets().then(() => _renderDashboard());
 }
 
+function refreshCurrentPanel() {
+  const active = document.querySelector('.admin-nav-btn.active')?.dataset.panel;
+  if (active === 'dashboard') _renderDashboard();
+  if (active === 'calendar') { renderAdminCalendar(); if (adminSelectedDate) adminSelectDay(adminSelectedDate); }
+  if (active === 'appointments') renderAllAppointments();
+}
+
 function _renderDashboard() {
   const all = getAppointments();
   console.log('dashboard appointments:', all.length, all);
@@ -261,8 +268,18 @@ function updateStatus(id, status) {
 function deleteAppt(id) {
   showConfirmDialog('למחוק תור זה לצמיתות?', () => {
     saveAppointments(getAppointments().filter(a => a.id !== id));
+    deleteFromSheets(id);
     refreshCurrentPanel();
   });
+}
+
+function deleteFromSheets(id) {
+  const cb = 'dc' + Date.now();
+  const url = WEBAPP_URL + '?action=deleteRow&callback=' + cb + '&id=' + encodeURIComponent(id);
+  window[cb] = () => { delete window[cb]; document.getElementById(cb)?.remove(); };
+  const s = document.createElement('script');
+  s.id = cb; s.src = url;
+  document.body.appendChild(s);
 }
 
 function sendReminderWA(id) {
@@ -293,7 +310,7 @@ function syncSheets() {
 
 function refreshCurrentPanel() {
   const active = document.querySelector('.admin-nav-btn.active')?.dataset.panel;
-  if (active === 'dashboard') renderDashboard();
+  if (active === 'dashboard') _renderDashboard();
   if (active === 'calendar') { renderAdminCalendar(); if (adminSelectedDate) adminSelectDay(adminSelectedDate); }
   if (active === 'appointments') renderAllAppointments();
 }
