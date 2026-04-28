@@ -6,11 +6,14 @@ let currentClient = null; // לקוחה מחוברת
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', () => {
   requestNotificationPermission();
-  renderServices();
   initCalendar();
   bindSteps();
   bindMobileMenu();
-  initClientLogin();
+  // טען הגדרות ושירותים מ-Sheets לפני הצגת הדף
+  loadSettingsFromSheets().then(() => {
+    renderServices();
+    initClientLogin();
+  });
 });
 
 // ── CLIENT LOGIN ──
