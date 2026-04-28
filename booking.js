@@ -47,13 +47,18 @@ async function loadFromSheets() {
           const d = new Date(date);
           date = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
         }
+        let phone = String(r['טלפון'] || '');
+        // תיקון אפס מוביל שנעלם על ידי Sheets
+        if (phone && !phone.startsWith('0') && !phone.startsWith('+') && phone.length <= 9) {
+          phone = '0' + phone;
+        }
         return {
           id:          String(r['ID'] || ''),
           serviceName: String(r['שירות'] || ''),
           serviceIcon: '💅',
           date, time,
           clientName:  String(r['שם לקוחה'] || ''),
-          clientPhone: String(r['טלפון'] || ''),
+          clientPhone: phone,
           notes:       String(r['הערות'] || ''),
           status:      String(r['סטטוס'] || 'pending'),
           duration:    60,

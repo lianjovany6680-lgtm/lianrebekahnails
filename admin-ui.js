@@ -5,10 +5,13 @@ async function initBiometric() {
   if (!window.PublicKeyCredential) return;
   const credId = localStorage.getItem(BIOMETRIC_KEY);
   if (credId) {
+    // יש Face ID שמור - הצג כפתור ונסה אוטומטית
     document.getElementById('biometricBtn').style.display = 'flex';
     document.getElementById('biometricBtn').addEventListener('click', loginWithBiometric);
-    // נסה אוטומטית
     setTimeout(() => loginWithBiometric(), 300);
+  } else {
+    // אין Face ID - הצג כפתור הגדרה מתחת הסיסמא
+    document.getElementById('setupBiometricBtn').style.display = 'block';
   }
 }
 
