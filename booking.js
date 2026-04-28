@@ -36,18 +36,29 @@ async function loadFromSheets() {
       delete window[callbackName];
       document.getElementById('jsonpScript')?.remove();
       if (!Array.isArray(rows) || rows.length === 0) { resolve(null); return; }
-      const appts = rows.map(r => ({
-        id:          String(r['ID'] || ''),
-        serviceName: String(r['שירות'] || ''),
-        serviceIcon: '💅',
-        date:        String(r['תאריך'] || ''),
-        time:        String(r['שעה'] || ''),
-        clientName:  String(r['שם לקוחה'] || ''),
-        clientPhone: String(r['טלפון'] || ''),
-        notes:       String(r['הערות'] || ''),
-        status:      String(r['סטטוס'] || 'pending'),
-        duration:    60,
-      })).filter(a => a.id && a.date);
+      const appts = rows.map(r => {
+        let time = String(r['שעה'] || '');
+        if (time.includes('T') || time.includes('1899')) {
+          const d = new Date(time);
+          time = String(d.getUTCHours()).padStart(2,'0') + ':' + String(d.getUTCMinutes()).padStart(2,'0');
+        }
+        let date = String(r['תאריך'] || '');
+        if (date.includes('T') || date.includes('Z')) {
+          const d = new Date(date);
+          date = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+        }
+        return {
+          id:          String(r['ID'] || ''),
+          serviceName: String(r['שירות'] || ''),
+          serviceIcon: '💅',
+          date, time,
+          clientName:  String(r['שם לקוחה'] || ''),
+          clientPhone: String(r['טלפון'] || ''),
+          notes:       String(r['הערות'] || ''),
+          status:      String(r['סטטוס'] || 'pending'),
+          duration:    60,
+        };
+      }).filter(a => a.id && a.date);
       saveAppointments(appts);
       resolve(appts);
     };
